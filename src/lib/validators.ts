@@ -22,6 +22,7 @@ export const appInputSchema = z.object({
   description: z.string().min(10, "Deskripsi aplikasi minimal 10 karakter.").max(5000),
   category: z.string().min(2, "Kategori wajib dipilih."),
   iconUrl: z.string().url("URL ikon tidak valid.").nullable().optional().or(z.literal("")),
+  bannerUrl: z.string().url("URL banner tidak valid.").nullable().optional().or(z.literal("")),
   screenshots: z.array(z.string().url("URL tangkapan layar tidak valid.")).max(12).default([]),
   minAndroid: z.string().min(2).max(40).default("Android 8.0+"),
   isPublished: z.boolean().default(true),

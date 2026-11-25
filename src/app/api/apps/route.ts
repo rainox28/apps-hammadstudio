@@ -66,6 +66,7 @@ export async function POST(req: Request) {
         description: data.description,
         category: data.category,
         iconUrl: data.iconUrl || null,
+        bannerUrl: data.bannerUrl || null,
         screenshots: data.screenshots,
         minAndroid: data.minAndroid,
         isPublished: data.isPublished,

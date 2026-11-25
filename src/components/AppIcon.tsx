@@ -8,15 +8,15 @@ interface AppIconProps {
 
 const SIZE_CLASSES = {
   sm: "w-12 h-12 rounded-xl text-base",
-  md: "w-16 h-16 rounded-2xl text-xl",
-  lg: "w-20 h-20 sm:w-24 sm:h-24 rounded-[22px] text-2xl",
+  md: "w-14 h-14 sm:w-16 sm:h-16 rounded-2xl text-lg",
+  lg: "w-18 h-18 sm:w-20 sm:h-20 rounded-[20px] text-xl",
   xl: "w-24 h-24 sm:w-28 sm:h-28 rounded-[26px] text-3xl",
 } as const;
 
 const SIZE_PX = {
   sm: 48,
   md: 64,
-  lg: 96,
+  lg: 80,
   xl: 112,
 } as const;
 
@@ -38,7 +38,7 @@ export function AppIcon({ name, iconUrl, size = "md" }: AppIconProps) {
         alt={`Ikon aplikasi ${name}`}
         width={px}
         height={px}
-        className={`${sizeClass} shrink-0 object-cover border border-[#E4EAE6] bg-[#F5F7F6]`}
+        className={`${sizeClass} shrink-0 object-cover border border-[#E2E8E5] bg-[#F8FAF9] play-icon-elevation`}
       />
     );
   }
@@ -46,7 +46,7 @@ export function AppIcon({ name, iconUrl, size = "md" }: AppIconProps) {
   return (
     <div
       aria-hidden="true"
-      className={`${sizeClass} shrink-0 flex items-center justify-center border border-[#C8D3CC] bg-[#E6F4EE] text-[#017A56] font-bold tracking-tight select-none`}
+      className={`${sizeClass} shrink-0 flex items-center justify-center border border-[#C8D3CC] bg-[#E6F4EE] text-[#017A56] font-bold tracking-tight select-none play-icon-elevation`}
     >
       {getInitials(name)}
     </div>

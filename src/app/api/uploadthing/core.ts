@@ -20,6 +20,21 @@ export const ourFileRouter = {
       return { uploadedBy: metadata.userId, url: file.ufsUrl };
     }),
 
+  appBanner: f({
+    image: {
+      maxFileSize: "8MB",
+      maxFileCount: 1,
+    },
+  })
+    .middleware(async () => {
+      const user = await getSession();
+      if (!user) throw new UploadThingError("Unauthorized");
+      return { userId: user.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      return { uploadedBy: metadata.userId, url: file.ufsUrl };
+    }),
+
   appScreenshots: f({
     image: {
       maxFileSize: "8MB",

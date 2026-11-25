@@ -52,10 +52,10 @@ export function QrCodeModal({ appName, versionName, downloadPath }: QrCodeModalP
 
   return (
     <>
-      <button
+        <button
         type="button"
         onClick={handleOpen}
-        className="min-h-11 px-4 inline-flex items-center justify-center gap-2 rounded-lg border border-[#C8D3CC] bg-white text-sm font-semibold text-[#141917] hover:border-[#017A56] hover:text-[#017A56] tactile-press"
+        className="min-h-12 px-5 inline-flex items-center justify-center gap-2 rounded-full border border-[#C8D3CC] bg-white text-sm font-semibold text-[#111815] hover:border-[#017A56] hover:text-[#017A56] tactile-press"
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
           <rect x="3" y="3" width="7" height="7" rx="1" />
@@ -75,7 +75,7 @@ export function QrCodeModal({ appName, versionName, downloadPath }: QrCodeModalP
           onClick={() => setOpen(false)}
         >
           <div
-            className="w-full max-w-sm rounded-2xl bg-white border border-[#E4EAE6] p-6 shadow-xl"
+            className="w-full max-w-sm rounded-2xl bg-white border border-[#E2E8E5] p-6 shadow-xl animate-modal-in"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-3">

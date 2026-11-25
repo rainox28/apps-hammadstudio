@@ -31,6 +31,7 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
   const [tagline, setTagline] = useState(initialApp?.tagline ?? "");
   const [description, setDescription] = useState(initialApp?.description ?? "");
   const [iconUrl, setIconUrl] = useState(initialApp?.iconUrl ?? "");
+  const [bannerUrl, setBannerUrl] = useState(initialApp?.bannerUrl ?? "");
   const [screenshots, setScreenshots] = useState<string[]>(
     initialApp?.screenshots ?? []
   );
@@ -54,11 +55,25 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
         const uploaded = res?.[0];
         if (uploaded?.ufsUrl) {
           setIconUrl(uploaded.ufsUrl);
-          setUploadMsg("Ikon berhasil diunggah.");
+          setUploadMsg("Ikon aplikasi berhasil diunggah.");
         }
       },
       onUploadError: (err) => {
         setError(`Gagal unggah ikon: ${err.message}`);
+      },
+    });
+
+  const { startUpload: uploadBanner, isUploading: isUploadingBanner } =
+    useUploadThing("appBanner", {
+      onClientUploadComplete: (res) => {
+        const uploaded = res?.[0];
+        if (uploaded?.ufsUrl) {
+          setBannerUrl(uploaded.ufsUrl);
+          setUploadMsg("Banner feature graphic 16:9 berhasil diunggah.");
+        }
+      },
+      onUploadError: (err) => {
+        setError(`Gagal unggah banner: ${err.message}`);
       },
     });
 
@@ -89,6 +104,15 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
     setError(null);
     setUploadMsg("Mengunggah ikon...");
     await uploadIcon(Array.from(files));
+    e.target.value = "";
+  }
+
+  async function handleBannerSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    setError(null);
+    setUploadMsg("Mengunggah banner feature graphic...");
+    await uploadBanner(Array.from(files));
     e.target.value = "";
   }
 
@@ -124,6 +148,7 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
         tagline,
         description,
         iconUrl: iconUrl || null,
+        bannerUrl: bannerUrl || null,
         screenshots,
         isPublished,
         isFeatured,
@@ -206,30 +231,35 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
       {uploadMsg && !error && (
         <div
           role="status"
-          className="rounded-xl border border-[#E4EAE6] bg-[#F5F7F6] px-4 py-2.5 text-xs font-medium text-[#141917]"
+          className="rounded-xl border border-[#E2E8E5] bg-[#F8FAF9] px-4 py-2.5 text-xs font-medium text-[#111815]"
         >
           {uploadMsg}
         </div>
       )}
 
-      <section className="rounded-2xl border border-[#E4EAE6] bg-white p-5 sm:p-6 space-y-5">
-        <h2 className="text-base sm:text-lg font-bold text-[#141917]">
-          Aset Visual (UploadThing)
-        </h2>
+      <section className="rounded-2xl border border-[#E2E8E5] bg-white p-5 sm:p-6 space-y-6">
+        <div>
+          <h2 className="text-base sm:text-lg font-bold text-[#111815]">
+            Aset Play Store (UploadThing)
+          </h2>
+          <p className="text-xs text-[#48544E] mt-0.5">
+            Unggah ikon aplikasi 1:1, banner feature graphic 16:9, dan tangkapan layar UI aplikasi.
+          </p>
+        </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-2xl border border-[#E2E8E5] bg-[#F8FAF9]">
           <AppIcon name={name || "App"} iconUrl={iconUrl || null} size="lg" />
           <div className="space-y-2">
             <label
               htmlFor="app-icon-upload"
-              className="block text-sm font-semibold text-[#141917]"
+              className="block text-sm font-semibold text-[#111815]"
             >
-              Ikon Aplikasi (PNG/JPG/WebP, maks 4MB)
+              Ikon Aplikasi (512x512, maks 4MB)
             </label>
             <div className="flex flex-wrap items-center gap-2">
               <label
                 htmlFor="app-icon-upload"
-                className="min-h-11 px-4 inline-flex items-center justify-center rounded-xl border border-[#C8D3CC] bg-white text-sm font-semibold text-[#141917] hover:border-[#017A56] hover:text-[#017A56]"
+                className="min-h-10 px-4 inline-flex items-center justify-center rounded-full border border-[#C8D3CC] bg-white text-xs sm:text-sm font-semibold text-[#111815] hover:border-[#017A56] hover:text-[#017A56] tactile-press"
               >
                 {isUploadingIcon ? "Mengunggah..." : "Pilih & Unggah Ikon"}
               </label>
@@ -245,7 +275,7 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
                 <button
                   type="button"
                   onClick={() => setIconUrl("")}
-                  className="min-h-11 px-3 rounded-xl text-xs font-semibold text-[#991B1B] hover:bg-[#FEF2F2]"
+                  className="min-h-10 px-3 rounded-full text-xs font-semibold text-[#991B1B] hover:bg-[#FEF2F2]"
                 >
                   Hapus Ikon
                 </button>
@@ -254,22 +284,79 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
           </div>
         </div>
 
-        <div className="pt-4 border-t border-[#E4EAE6]">
-          <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <div className="p-4 rounded-2xl border border-[#E2E8E5] bg-[#F8FAF9] space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <label
+                htmlFor="app-banner-upload"
+                className="block text-sm font-semibold text-[#111815]"
+              >
+                Banner Feature Graphic (16:9 atau 1024x500, maks 8MB)
+              </label>
+              <p className="text-xs text-[#48544E]">
+                Ditampilkan sebagai banner promosi utama pada katalog dan halaman detail aplikasi.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <label
+                htmlFor="app-banner-upload"
+                className="min-h-10 px-4 inline-flex items-center justify-center rounded-full border border-[#C8D3CC] bg-white text-xs sm:text-sm font-semibold text-[#111815] hover:border-[#017A56] hover:text-[#017A56] tactile-press"
+              >
+                {isUploadingBanner ? "Mengunggah..." : "Unggah Banner"}
+              </label>
+              <input
+                id="app-banner-upload"
+                type="file"
+                accept="image/*"
+                disabled={isUploadingBanner}
+                onChange={handleBannerSelect}
+                className="sr-only"
+              />
+              {bannerUrl && (
+                <button
+                  type="button"
+                  onClick={() => setBannerUrl("")}
+                  className="min-h-10 px-3 rounded-full text-xs font-semibold text-[#991B1B] hover:bg-[#FEF2F2]"
+                >
+                  Hapus Banner
+                </button>
+              )}
+            </div>
+          </div>
+
+          {bannerUrl ? (
+            <div className="aspect-[21/9] max-h-56 w-full rounded-xl overflow-hidden border border-[#E2E8E5] bg-white">
+              <img
+                src={bannerUrl}
+                alt="Pratinjau banner aplikasi"
+                width={960}
+                height={410}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ) : (
+            <p className="text-xs text-[#48544E] rounded-xl border border-dashed border-[#C8D3CC] bg-white p-4">
+              Belum ada banner feature graphic. Jika dikosongkan, halaman sorotan menggunakan panel studio gelap.
+            </p>
+          )}
+        </div>
+
+        <div className="p-4 rounded-2xl border border-[#E2E8E5] bg-[#F8FAF9] space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
               <label
                 htmlFor="app-screenshots-upload"
-                className="block text-sm font-semibold text-[#141917]"
+                className="block text-sm font-semibold text-[#111815]"
               >
                 Tangkapan Layar (maks 8 gambar per unggah, maks 8MB/file)
               </label>
-              <p className="text-xs text-[#49544E]">
+              <p className="text-xs text-[#48544E]">
                 Ditampilkan sebagai galeri geser seperti halaman detail Google Play.
               </p>
             </div>
             <label
               htmlFor="app-screenshots-upload"
-              className="min-h-11 px-4 inline-flex items-center justify-center rounded-xl border border-[#C8D3CC] bg-white text-sm font-semibold text-[#141917] hover:border-[#017A56] hover:text-[#017A56]"
+              className="min-h-10 px-4 inline-flex items-center justify-center rounded-full border border-[#C8D3CC] bg-white text-xs sm:text-sm font-semibold text-[#111815] hover:border-[#017A56] hover:text-[#017A56] tactile-press"
             >
               {isUploadingShots ? "Mengunggah..." : "Unggah Screenshot"}
             </label>
@@ -285,7 +372,7 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
           </div>
 
           {screenshots.length === 0 ? (
-            <p className="text-xs text-[#49544E] rounded-xl border border-dashed border-[#C8D3CC] bg-[#F5F7F6] p-4">
+            <p className="text-xs text-[#48544E] rounded-xl border border-dashed border-[#C8D3CC] bg-white p-4">
               Belum ada tangkapan layar yang diunggah.
             </p>
           ) : (
@@ -293,7 +380,7 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
               {screenshots.map((url, idx) => (
                 <div
                   key={`${url}-${idx}`}
-                  className="relative rounded-xl border border-[#E4EAE6] bg-[#F5F7F6] overflow-hidden"
+                  className="relative rounded-xl border border-[#E2E8E5] bg-white overflow-hidden"
                 >
                   <img
                     src={url}
@@ -306,7 +393,7 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
                     type="button"
                     onClick={() => removeScreenshot(idx)}
                     aria-label={`Hapus tangkapan layar ${idx + 1}`}
-                    className="w-full min-h-11 bg-white border-t border-[#E4EAE6] text-xs font-semibold text-[#991B1B] hover:bg-[#FEF2F2]"
+                    className="w-full min-h-10 bg-white border-t border-[#E2E8E5] text-xs font-semibold text-[#991B1B] hover:bg-[#FEF2F2]"
                   >
                     Hapus
                   </button>
@@ -317,8 +404,8 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-[#E4EAE6] bg-white p-5 sm:p-6 space-y-4">
-        <h2 className="text-base sm:text-lg font-bold text-[#141917]">
+      <section className="rounded-2xl border border-[#E2E8E5] bg-white p-5 sm:p-6 space-y-4">
+        <h2 className="text-base sm:text-lg font-bold text-[#111815]">
           Identitas &amp; Detail Aplikasi
         </h2>
 
@@ -326,7 +413,7 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
           <div>
             <label
               htmlFor="app-name"
-              className="block text-sm font-semibold text-[#141917] mb-1.5"
+              className="block text-sm font-semibold text-[#111815] mb-1.5"
             >
               Nama Aplikasi
             </label>
@@ -337,14 +424,14 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
               value={name}
               onChange={(e) => handleNameChange(e.target.value)}
               placeholder="Contoh: Martabak Depok 78 POS"
-              className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] text-sm text-[#141917] focus:border-[#017A56] focus:outline-none"
+              className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] text-sm text-[#111815] focus:border-[#017A56] focus:outline-none"
             />
           </div>
 
           <div>
             <label
               htmlFor="app-slug"
-              className="block text-sm font-semibold text-[#141917] mb-1.5"
+              className="block text-sm font-semibold text-[#111815] mb-1.5"
             >
               Slug URL (/apps/...)
             </label>
@@ -358,14 +445,14 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
                 setSlug(e.target.value.toLowerCase());
               }}
               placeholder="martabak-depok-78-pos"
-              className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] text-sm font-mono text-[#141917] focus:border-[#017A56] focus:outline-none"
+              className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] text-sm font-mono text-[#111815] focus:border-[#017A56] focus:outline-none"
             />
           </div>
 
           <div>
             <label
               htmlFor="app-package"
-              className="block text-sm font-semibold text-[#141917] mb-1.5"
+              className="block text-sm font-semibold text-[#111815] mb-1.5"
             >
               Android Package Name
             </label>
@@ -376,14 +463,14 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
               value={packageName}
               onChange={(e) => setPackageName(e.target.value)}
               placeholder="studio.hammad.martabak78pos"
-              className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] text-sm font-mono text-[#141917] focus:border-[#017A56] focus:outline-none"
+              className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] text-sm font-mono text-[#111815] focus:border-[#017A56] focus:outline-none"
             />
           </div>
 
           <div>
             <label
               htmlFor="app-developer"
-              className="block text-sm font-semibold text-[#141917] mb-1.5"
+              className="block text-sm font-semibold text-[#111815] mb-1.5"
             >
               Developer / Klien
             </label>
@@ -394,14 +481,14 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
               value={developerName}
               onChange={(e) => setDeveloperName(e.target.value)}
               placeholder="Hammad Studio"
-              className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] text-sm text-[#141917] focus:border-[#017A56] focus:outline-none"
+              className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] text-sm text-[#111815] focus:border-[#017A56] focus:outline-none"
             />
           </div>
 
           <div>
             <label
               htmlFor="app-category"
-              className="block text-sm font-semibold text-[#141917] mb-1.5"
+              className="block text-sm font-semibold text-[#111815] mb-1.5"
             >
               Kategori
             </label>
@@ -409,7 +496,7 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
               id="app-category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full h-11 px-3 rounded-xl border border-[#C8D3CC] bg-white text-sm text-[#141917] focus:border-[#017A56] focus:outline-none"
+              className="w-full h-11 px-3 rounded-xl border border-[#C8D3CC] bg-white text-sm text-[#111815] focus:border-[#017A56] focus:outline-none"
             >
               {APP_CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
@@ -422,7 +509,7 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
           <div>
             <label
               htmlFor="app-min-android"
-              className="block text-sm font-semibold text-[#141917] mb-1.5"
+              className="block text-sm font-semibold text-[#111815] mb-1.5"
             >
               Minimum OS Android
             </label>
@@ -433,7 +520,7 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
               value={minAndroid}
               onChange={(e) => setMinAndroid(e.target.value)}
               placeholder="Android 8.0+"
-              className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] text-sm text-[#141917] focus:border-[#017A56] focus:outline-none"
+              className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] text-sm text-[#111815] focus:border-[#017A56] focus:outline-none"
             />
           </div>
         </div>
@@ -441,7 +528,7 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
         <div>
           <label
             htmlFor="app-tagline"
-            className="block text-sm font-semibold text-[#141917] mb-1.5"
+            className="block text-sm font-semibold text-[#111815] mb-1.5"
           >
             Ringkasan Singkat (Tagline)
           </label>
@@ -453,14 +540,14 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
             value={tagline}
             onChange={(e) => setTagline(e.target.value)}
             placeholder="Ringkasan satu kalimat fungsi utama aplikasi"
-            className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] text-sm text-[#141917] focus:border-[#017A56] focus:outline-none"
+            className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] text-sm text-[#111815] focus:border-[#017A56] focus:outline-none"
           />
         </div>
 
         <div>
           <label
             htmlFor="app-description"
-            className="block text-sm font-semibold text-[#141917] mb-1.5"
+            className="block text-sm font-semibold text-[#111815] mb-1.5"
           >
             Deskripsi Lengkap
           </label>
@@ -471,14 +558,14 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Jelaskan fitur utama, catatan penguji, dan cakupan versi prarilis."
-            className="w-full p-3.5 rounded-xl border border-[#C8D3CC] text-sm text-[#141917] focus:border-[#017A56] focus:outline-none"
+            className="w-full p-3.5 rounded-xl border border-[#C8D3CC] text-sm text-[#111815] focus:border-[#017A56] focus:outline-none"
           />
         </div>
 
         <div className="pt-2 flex flex-col sm:flex-row gap-4">
           <label
             htmlFor="app-published"
-            className="flex items-center gap-2.5 min-h-11 text-sm font-medium text-[#141917]"
+            className="flex items-center gap-2.5 min-h-11 text-sm font-medium text-[#111815]"
           >
             <input
               id="app-published"
@@ -492,7 +579,7 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
 
           <label
             htmlFor="app-featured"
-            className="flex items-center gap-2.5 min-h-11 text-sm font-medium text-[#141917]"
+            className="flex items-center gap-2.5 min-h-11 text-sm font-medium text-[#111815]"
           >
             <input
               id="app-featured"
@@ -509,8 +596,10 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <button
           type="submit"
-          disabled={saving || isUploadingIcon || isUploadingShots}
-          className="min-h-12 px-6 rounded-xl bg-[#017A56] text-white text-sm font-semibold hover:bg-[#016346] disabled:opacity-60 tactile-press"
+          disabled={
+            saving || isUploadingIcon || isUploadingBanner || isUploadingShots
+          }
+          className="min-h-12 px-6 rounded-full bg-[#017A56] text-white text-sm font-semibold hover:bg-[#016346] disabled:opacity-60 tactile-press"
         >
           {saving
             ? "Menyimpan..."
@@ -525,7 +614,7 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
               <button
                 type="button"
                 onClick={() => setConfirmDelete(true)}
-                className="min-h-11 px-4 rounded-xl border border-[#FCA5A5] text-sm font-semibold text-[#991B1B] hover:bg-[#FEF2F2]"
+                className="min-h-11 px-4 rounded-full border border-[#FCA5A5] text-sm font-semibold text-[#991B1B] hover:bg-[#FEF2F2]"
               >
                 Hapus Aplikasi
               </button>
@@ -535,14 +624,14 @@ export function AppForm({ mode, initialApp }: AppFormProps) {
                   type="button"
                   onClick={handleDeleteApp}
                   disabled={deleting}
-                  className="min-h-11 px-4 rounded-xl bg-[#991B1B] text-white text-sm font-semibold disabled:opacity-60"
+                  className="min-h-11 px-4 rounded-full bg-[#991B1B] text-white text-sm font-semibold disabled:opacity-60"
                 >
                   {deleting ? "Menghapus..." : "Ya, Hapus Permanen"}
                 </button>
                 <button
                   type="button"
                   onClick={() => setConfirmDelete(false)}
-                  className="min-h-11 px-3 rounded-xl border border-[#C8D3CC] text-sm font-medium text-[#141917]"
+                  className="min-h-11 px-3 rounded-full border border-[#C8D3CC] text-sm font-medium text-[#111815]"
                 >
                   Batal
                 </button>

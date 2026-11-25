@@ -44,6 +44,7 @@ export const apps = pgTable(
     description: text("description").notNull(),
     category: text("category").notNull().default("Bisnis & Kasir"),
     iconUrl: text("icon_url"),
+    bannerUrl: text("banner_url"),
     screenshots: jsonb("screenshots").$type<string[]>().notNull().default([]),
     minAndroid: text("min_android").notNull().default("Android 8.0+"),
     isPublished: boolean("is_published").notNull().default(true),

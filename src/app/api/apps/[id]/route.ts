@@ -79,6 +79,7 @@ export async function PATCH(
         description: data.description,
         category: data.category,
         iconUrl: data.iconUrl || null,
+        bannerUrl: data.bannerUrl || null,
         screenshots: data.screenshots,
         minAndroid: data.minAndroid,
         isPublished: data.isPublished,

@@ -109,7 +109,7 @@ export function ScreenshotGallery({ appName, screenshots }: ScreenshotGalleryPro
           onClick={() => setActiveIndex(null)}
         >
           <div
-            className="relative max-w-2xl w-full flex flex-col items-center gap-3"
+            className="relative max-w-2xl w-full flex flex-col items-center gap-3 animate-modal-in"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="w-full flex items-center justify-between text-white">

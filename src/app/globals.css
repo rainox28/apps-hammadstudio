@@ -2,12 +2,12 @@
 
 :root {
   --background: #ffffff;
-  --surface: #f5f7f6;
-  --surface-elevated: #ffffff;
-  --border: #e4eae6;
+  --surface: #f8faf9;
+  --surface-muted: #f0f4f2;
+  --border: #e2e8e5;
   --border-strong: #c8d3cc;
-  --foreground: #141917;
-  --muted: #49544e;
+  --foreground: #111815;
+  --muted: #48544e;
   --accent: #017a56;
   --accent-hover: #016346;
   --accent-soft: #e6f4ee;
@@ -66,11 +66,42 @@
 }
 
 .tactile-press {
-  transition: transform 160ms var(--ease-out-expo), background-color 160ms ease, border-color 160ms ease;
+  transition:
+    transform 180ms var(--ease-out-expo),
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 180ms var(--ease-out-expo);
 }
 
 .tactile-press:active:not(:disabled) {
   transform: scale(0.98);
+}
+
+.play-card-elevation {
+  box-shadow:
+    0 1px 2px rgba(17, 24, 21, 0.05),
+    0 6px 18px rgba(17, 24, 21, 0.04);
+}
+
+.play-icon-elevation {
+  box-shadow:
+    0 1px 3px rgba(17, 24, 21, 0.08),
+    0 4px 12px rgba(17, 24, 21, 0.05);
+}
+
+@keyframes modalPanelIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-modal-in {
+  animation: modalPanelIn 200ms var(--ease-out-expo) both;
 }
 
 .no-scrollbar::-webkit-scrollbar {
