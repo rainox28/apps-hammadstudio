@@ -46,7 +46,7 @@ export function AppIcon({
         alt={`Ikon aplikasi ${name}`}
         width={px}
         height={px}
-        className={`${sizeClass} shrink-0 object-cover border border-[#dce3da] bg-white shadow-[0_2px_6px_rgba(24,34,28,0.08)]`}
+        className={`${sizeClass} shrink-0 object-cover border border-line bg-white shadow-[0_1px_2px_rgba(23,33,27,0.06)]`}
       />
     );
   }
@@ -58,7 +58,7 @@ export function AppIcon({
         backgroundColor: skinMeta.iconBg,
         color: skinMeta.iconInk,
       }}
-      className={`${sizeClass} shrink-0 flex items-center justify-center border border-[#dce3da]/70 font-extrabold tracking-tight select-none shadow-[0_2px_6px_rgba(24,34,28,0.08)]`}
+      className={`${sizeClass} shrink-0 flex items-center justify-center border border-black/5 font-semibold tracking-[-0.02em] select-none shadow-[0_1px_2px_rgba(23,33,27,0.06)]`}
     >
       {getInitials(name)}
     </div>

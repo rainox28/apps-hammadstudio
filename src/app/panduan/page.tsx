@@ -7,96 +7,117 @@ import { MobileBottomNav } from "@/components/MobileBottomNav";
 
 export const dynamic = "force-dynamic";
 
+const STEPS = [
+  {
+    title: "Izinkan dari browser",
+    body: "Saat pertama kali memasang, Android meminta izin “Instal aplikasi tak dikenal” untuk browser yang kamu pakai. Aktifkan sekali saja.",
+    hint: "Setelan › Aplikasi › Chrome › Instal aplikasi tak dikenal",
+  },
+  {
+    title: "Unduh APK",
+    body: "Buka halaman aplikasi di katalog, lalu ketuk Unduh APK. Kalau membuka dari komputer, pindai Kode QR-nya dengan kamera HP.",
+    hint: "File tersimpan di folder Download",
+  },
+  {
+    title: "Buka dan pasang",
+    body: "Ketuk notifikasi unduhan atau buka file .apk dari folder Download, pastikan nama aplikasinya benar, lalu pilih Pasang.",
+    hint: "Update berikutnya dipasang di atas versi lama, data tetap aman",
+  },
+] as const;
+
+const FAQS = [
+  {
+    q: "Apakah APK di sini aman?",
+    a: "Semua build diunggah langsung oleh Hammad Studio. Cocokkan checksum SHA-256 di halaman detail aplikasi kalau ingin memastikan file tidak berubah.",
+  },
+  {
+    q: "Kenapa muncul peringatan Play Protect?",
+    a: "Build prarilis belum terdaftar di Google Play, jadi Play Protect belum mengenalinya. Pilih “Tetap instal” untuk melanjutkan.",
+  },
+  {
+    q: "Apa beda Siap, Beta, dan Segera?",
+    a: "Siap berarti layak dipakai harian. Beta masih diuji dan mungkin ada bug. Segera berarti build-nya belum tersedia.",
+  },
+  {
+    q: "Bagaimana kalau pemasangan gagal?",
+    a: "Hapus versi lama kalau tanda tangannya berbeda, pastikan ruang penyimpanan cukup, lalu unduh ulang APK-nya.",
+  },
+] as const;
+
 export default async function InstallGuidePage() {
   const session = await getSession();
 
   return (
     <>
-      <Suspense fallback={<div className="h-[72px] border-b border-[#dce3da] bg-white" />}>
+      <Suspense fallback={<div className="h-16 border-b border-line bg-white" />}>
         <StoreHeader isAuthenticated={Boolean(session)} />
       </Suspense>
 
-      <main className="site-wrap flex-1 py-8">
-        <div className="max-w-2xl">
-          <Link
-            href="/"
-            className="inline-flex items-center min-h-11 text-sm font-bold text-[#006c4c] hover:underline"
-          >
-            Kembali ke Katalog
-          </Link>
-
-          <div className="mt-3 rounded-[22px] border border-[#dce3da] bg-white p-6 sm:p-8">
-            <span className="w-12 h-12 rounded-[14px] bg-[#deebd5] text-[#2d6848] grid place-items-center mb-4">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                <rect x="6.3" y="2.5" width="11.4" height="19" rx="2.7" />
-                <path d="M10.5 5h3m-2.1 13.7h1.2" />
-              </svg>
-            </span>
-
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#18221c] tracking-[-0.04em]">
-              Pasang APK di Android
+      <main className="site-wrap flex-1 pt-6 pb-16">
+        <section className="overflow-hidden rounded-[20px] bg-night flex flex-col md:flex-row">
+          <div className="md:flex-1 px-6 py-10 sm:px-11 sm:py-12 text-white">
+            <h1 className="text-[2rem] sm:text-[2.5rem] leading-[1.12] font-extrabold tracking-[-0.02em]">
+              Pasang APK dalam tiga langkah
             </h1>
-            <p className="text-sm sm:text-base text-[#52625a] mt-2 leading-relaxed">
-              Ikuti langkah berikut untuk memasang build prarilis resmi dari Studio Apps sebelum dipublikasikan ke Google Play Store.
+            <p className="mt-3 max-w-[48ch] text-base sm:text-[17px] leading-relaxed text-night-ink">
+              Build prarilis tidak lewat Google Play, jadi Android perlu izin sekali untuk memasangnya. Setelah itu, update berikutnya tinggal unduh.
             </p>
-
-            <ol className="mt-6 space-y-4">
-              <li className="grid grid-cols-[30px_1fr] gap-3 items-start">
-                <span className="w-7 h-7 rounded-lg bg-[#e9f1e4] text-[#275136] text-xs font-extrabold grid place-items-center mt-0.5">
-                  1
-                </span>
-                <div>
-                  <strong className="text-sm sm:text-base font-bold text-[#18221c]">
-                    Unduh APK di HP
-                  </strong>
-                  <p className="text-sm text-[#4b5d52] mt-1">
-                    Buka halaman aplikasi, cek versinya, lalu ketuk Unduh APK. Jika membuka dari komputer, gunakan fitur Scan QR di HP.
-                  </p>
-                </div>
-              </li>
-
-              <li className="grid grid-cols-[30px_1fr] gap-3 items-start">
-                <span className="w-7 h-7 rounded-lg bg-[#e9f1e4] text-[#275136] text-xs font-extrabold grid place-items-center mt-0.5">
-                  2
-                </span>
-                <div>
-                  <strong className="text-sm sm:text-base font-bold text-[#18221c]">
-                    Buka file unduhan
-                  </strong>
-                  <p className="text-sm text-[#4b5d52] mt-1">
-                    Ketuk notifikasi unduhan, atau cari file berakhiran .apk di folder Unduhan perangkat Android kamu.
-                  </p>
-                </div>
-              </li>
-
-              <li className="grid grid-cols-[30px_1fr] gap-3 items-start">
-                <span className="w-7 h-7 rounded-lg bg-[#e9f1e4] text-[#275136] text-xs font-extrabold grid place-items-center mt-0.5">
-                  3
-                </span>
-                <div>
-                  <strong className="text-sm sm:text-base font-bold text-[#18221c]">
-                    Ikuti petunjuk pemasangan
-                  </strong>
-                  <p className="text-sm text-[#4b5d52] mt-1">
-                    Aktifkan izin sumber tidak dikenal jika diminta Android, periksa nama aplikasi dan sumber file, lalu pilih Instal dan Buka setelah selesai.
-                  </p>
-                </div>
-              </li>
-            </ol>
-
-            <a
-              href="https://support.google.com/android/answer/9457058?hl=id"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#006c4c] underline underline-offset-4"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                <path d="M12 6.4C9.5 4.6 6.6 4.2 3 5.1v13.6c3.8-.9 6.8-.3 9 1.3 2.2-1.6 5.2-2.2 9-1.3V5.1c-3.6-.9-6.5-.5-9 1.3zm0 0V20" />
-              </svg>
-              <span>Panduan resmi Android</span>
-            </a>
           </div>
-        </div>
+          <div aria-hidden="true" className="md:flex-1 min-h-[260px] night-glow-bg flex items-center justify-center p-7">
+            <div className="w-[180px] rounded-[26px] bg-white p-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
+              <div className="rounded-[18px] bg-raised px-3.5 py-5 flex flex-col items-center gap-2.5 text-center text-ink">
+                <img src="/brand-logo.png" alt="" width={52} height={52} className="w-[52px] h-[52px] rounded-[14px] object-cover" />
+                <span className="text-[13px] font-bold">Studio Apps</span>
+                <span className="text-[11px] text-ink-3">Ingin memasang aplikasi ini?</span>
+                <span className="flex w-full gap-1.5 text-[11px]">
+                  <span className="flex-1 py-2 font-semibold text-accent">Batal</span>
+                  <span className="flex-1 py-2 rounded-full bg-accent text-white font-bold">Pasang</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <ol className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-5">
+          {STEPS.map((step, idx) => (
+            <li key={step.title} className="rounded-[16px] border border-line p-6 flex flex-col gap-3.5">
+              <span className="w-10 h-10 rounded-[12px] bg-accent-soft text-accent-ink text-[17px] font-extrabold grid place-items-center tabular-nums">
+                {idx + 1}
+              </span>
+              <h2 className="text-lg font-bold">{step.title}</h2>
+              <p className="text-sm leading-[1.65] text-ink-2">{step.body}</p>
+              <p className="mt-auto rounded-[10px] bg-raised px-3 py-2.5 text-xs text-ink-3">{step.hint}</p>
+            </li>
+          ))}
+        </ol>
+
+        <section className="mt-12 grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8 lg:gap-12">
+          <div>
+            <h2 className="text-2xl font-bold">Pertanyaan umum</h2>
+            <p className="mt-2 text-sm leading-relaxed text-ink-3">
+              Masih bingung? Hubungi Hammad Studio lewat kontak proyekmu.
+            </p>
+            <Link
+              href="/"
+              className="mt-5 min-h-11 px-5 inline-flex items-center rounded-full bg-accent text-white text-sm font-bold hover:bg-accent-hover tactile-press"
+            >
+              Kembali ke katalog
+            </Link>
+          </div>
+          <div className="border-t border-line">
+            {FAQS.map((f) => (
+              <details key={f.q} className="group border-b border-line py-4">
+                <summary className="flex items-center justify-between gap-4 min-h-8 text-[15px] font-semibold list-none [&::-webkit-details-marker]:hidden">
+                  {f.q}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true" className="shrink-0 text-ink-3 transition-transform group-open:rotate-180">
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </summary>
+                <p className="mt-2.5 text-sm leading-[1.65] text-ink-2">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
       </main>
 
       <StoreFooter />

@@ -14,42 +14,54 @@ export default async function LoginPage() {
   }
 
   return (
-    <div className="min-h-dvh flex flex-col bg-[#fafbf8] px-4 py-10">
-      <div className="max-w-md w-full m-auto">
-        <div className="mb-6 flex items-center justify-between">
+    <div className="min-h-dvh flex flex-col md:flex-row bg-white">
+      <div className="relative md:flex-1 bg-night text-white px-6 py-8 sm:px-12 sm:py-10 flex flex-col overflow-hidden min-h-[300px] md:min-h-dvh">
+        <Link href="/" className="relative z-10 inline-flex items-center gap-2.5 text-lg font-bold">
+          <BrandLogo size={32} />
+          Studio Apps
+        </Link>
+        <div aria-hidden="true" className="relative flex-1 hidden md:flex items-center justify-center py-10">
+          <img
+            src="/artwork/wisata.webp"
+            alt=""
+            width={300}
+            height={188}
+            className="absolute w-[52%] max-w-[300px] aspect-[16/10] object-cover rounded-[10px] -translate-x-[38%] -translate-y-[30%] -rotate-[7deg] shadow-[0_14px_36px_rgba(0,0,0,0.5)]"
+          />
+          <img
+            src="/artwork/heroMobile.webp"
+            alt=""
+            width={300}
+            height={188}
+            className="absolute w-[52%] max-w-[300px] aspect-[16/10] object-cover rounded-[10px] translate-x-[40%] translate-y-[26%] rotate-6 shadow-[0_14px_36px_rgba(0,0,0,0.5)]"
+          />
+          <img
+            src="/artwork/martaboy.webp"
+            alt=""
+            width={340}
+            height={212}
+            className="relative w-[60%] max-w-[340px] aspect-[16/10] object-cover glow-frame"
+          />
+        </div>
+        <div className="relative z-10 mt-auto md:mt-0 pt-10 md:pt-0">
+          <p className="text-[1.6rem] font-extrabold tracking-[-0.02em]">Ruang rilis Hammad Studio</p>
+          <p className="mt-1 text-[15px] text-night-mute">Unggah build, atur status, dan bagikan ke penguji.</p>
+        </div>
+      </div>
+
+      <main className="md:flex-1 flex items-center justify-center px-6 py-12 sm:px-8">
+        <div className="w-full max-w-[380px]">
+          <h1 className="text-[1.9rem] font-extrabold tracking-[-0.02em]">Masuk</h1>
+          <p className="mt-1 mb-7 text-[15px] text-ink-3">Khusus admin Hammad Studio.</p>
+          <LoginForm />
           <Link
             href="/"
-            className="inline-flex items-center gap-2.5 text-base font-extrabold tracking-[-0.04em] text-[#18221c] hover:text-[#006c4c]"
+            className="mt-4 flex justify-center min-h-11 items-center text-sm font-semibold text-accent hover:text-accent-hover"
           >
-            <BrandLogo size={34} />
-            <span>
-              Studio <span className="text-[#006c4c]">Apps</span>
-            </span>
-          </Link>
-          <Link
-            href="/"
-            className="min-h-11 inline-flex items-center text-xs font-semibold text-[#52625a] hover:text-[#18221c]"
-          >
-            Kembali ke Katalog
+            ← Kembali ke katalog
           </Link>
         </div>
-
-        <main className="rounded-[22px] border border-[#dce3da] bg-white p-6 sm:p-8 shadow-[0_4px_16px_rgba(24,34,28,0.04)]">
-          <div className="flex items-center gap-3 mb-5">
-            <BrandLogo size={42} />
-            <div>
-              <h1 className="text-xl sm:text-2xl font-extrabold text-[#18221c] tracking-[-0.04em]">
-                Studio Console
-              </h1>
-              <p className="text-xs text-[#52625a]">
-                Masuk untuk mengelola katalog &amp; rilis APK
-              </p>
-            </div>
-          </div>
-
-          <LoginForm />
-        </main>
-      </div>
+      </main>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { requireAdminPage } from "@/lib/auth";
-import { DashboardHeader } from "@/components/DashboardHeader";
+import { DashboardShell } from "@/components/DashboardShell";
 import { AppForm } from "@/components/AppForm";
 
 export const dynamic = "force-dynamic";
@@ -10,26 +10,20 @@ export default async function NewAppPage() {
   const user = await requireAdminPage();
 
   return (
-    <div className="min-h-dvh flex flex-col bg-[#F5F7F6]">
-      <DashboardHeader userEmail={user.email} />
-
-      <main className="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+    <DashboardShell userEmail={user.email}>
+      <main className="px-4 py-7 sm:px-8 lg:px-10 lg:py-8 max-w-[1080px]">
         <Link
           href="/dashboard"
-          className="inline-flex items-center min-h-11 text-sm font-semibold text-[#017A56] hover:underline"
+          className="inline-flex items-center min-h-10 text-[13px] font-semibold text-ink-3 hover:text-ink"
         >
-          Kembali ke Daftar Aplikasi
+          ← Semua aplikasi
         </Link>
-
-        <h1 className="text-2xl font-bold text-[#141917] mt-1 tracking-tight">
-          Tambah Aplikasi Baru
-        </h1>
-        <p className="text-sm text-[#49544E] mt-1 mb-6">
-          Isi identitas aplikasi dan unggah ikon/tangkapan layar, lalu tambahkan rilis APK di langkah berikutnya.
+        <h1 className="mt-2 text-[1.75rem] font-extrabold tracking-[-0.02em]">Tambah aplikasi</h1>
+        <p className="mt-1 mb-7 text-sm text-ink-3">
+          Isi identitas dan visual aplikasi, lalu tambahkan rilis APK di langkah berikutnya.
         </p>
-
         <AppForm mode="create" />
       </main>
-    </div>
+    </DashboardShell>
   );
 }
