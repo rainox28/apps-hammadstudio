@@ -20,12 +20,12 @@ export function MobileBottomNav({ isAuthenticated = false }: MobileBottomNavProp
   return (
     <nav
       aria-label="Navigasi seluler"
-      className="sm:hidden fixed z-20 bottom-0 left-0 right-0 flex items-stretch justify-evenly px-1.5 pt-1 pb-[max(4px,env(safe-area-inset-bottom))] bg-[#fffffff5] border-t border-[#d9e2d7]"
+      className="sm:hidden fixed z-20 bottom-0 left-0 right-0 flex items-stretch justify-evenly px-1.5 pt-1 pb-[max(4px,env(safe-area-inset-bottom))] bg-white/95 backdrop-blur-md border-t border-line"
     >
       <Link
         href="/"
-        className={`relative min-w-[23%] min-h-12 flex flex-col items-center justify-center gap-0.5 rounded-[11px] text-xs font-semibold ${
-          isExplore ? "text-[#006345] bg-[#edf5e9] font-bold" : "text-[#52625a]"
+        className={`relative min-w-[23%] min-h-12 flex flex-col items-center justify-center gap-0.5 rounded-[12px] text-[11px] font-medium ${
+          isExplore ? "text-accent bg-accent-soft font-semibold" : "text-ink-2"
         }`}
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
@@ -37,8 +37,8 @@ export function MobileBottomNav({ isAuthenticated = false }: MobileBottomNavProp
 
       <Link
         href="/?view=tersimpan"
-        className={`relative min-w-[23%] min-h-12 flex flex-col items-center justify-center gap-0.5 rounded-[11px] text-xs font-semibold ${
-          isSavedView ? "text-[#006345] bg-[#edf5e9] font-bold" : "text-[#52625a]"
+        className={`relative min-w-[23%] min-h-12 flex flex-col items-center justify-center gap-0.5 rounded-[12px] text-[11px] font-medium ${
+          isSavedView ? "text-accent bg-accent-soft font-semibold" : "text-ink-2"
         }`}
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
@@ -48,15 +48,15 @@ export function MobileBottomNav({ isAuthenticated = false }: MobileBottomNavProp
         {savedCount > 0 && (
           <span
             aria-label={`${savedCount} aplikasi tersimpan`}
-            className="absolute top-1.5 left-[calc(50%+10px)] w-2 h-2 rounded-full bg-[#006c4c]"
+            className="absolute top-1.5 left-[calc(50%+10px)] w-2 h-2 rounded-full bg-accent"
           />
         )}
       </Link>
 
       <Link
         href="/panduan"
-        className={`relative min-w-[23%] min-h-12 flex flex-col items-center justify-center gap-0.5 rounded-[11px] text-xs font-semibold ${
-          pathname === "/panduan" ? "text-[#006345] bg-[#edf5e9] font-bold" : "text-[#52625a]"
+        className={`relative min-w-[23%] min-h-12 flex flex-col items-center justify-center gap-0.5 rounded-[12px] text-[11px] font-medium ${
+          pathname === "/panduan" ? "text-accent bg-accent-soft font-semibold" : "text-ink-2"
         }`}
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
@@ -67,10 +67,10 @@ export function MobileBottomNav({ isAuthenticated = false }: MobileBottomNavProp
 
       <Link
         href={isAuthenticated ? "/dashboard" : "/login"}
-        className={`relative min-w-[23%] min-h-12 flex flex-col items-center justify-center gap-0.5 rounded-[11px] text-xs font-semibold ${
+        className={`relative min-w-[23%] min-h-12 flex flex-col items-center justify-center gap-0.5 rounded-[12px] text-[11px] font-medium ${
           pathname.startsWith("/dashboard") || pathname === "/login"
-            ? "text-[#006345] bg-[#edf5e9] font-bold"
-            : "text-[#52625a]"
+            ? "text-accent bg-accent-soft font-semibold"
+            : "text-ink-2"
         }`}
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
@@ -79,7 +79,7 @@ export function MobileBottomNav({ isAuthenticated = false }: MobileBottomNavProp
           <rect x="3.5" y="13.5" width="7" height="7" rx="1.5" />
           <rect x="13.5" y="13.5" width="7" height="7" rx="1.5" />
         </svg>
-        <span>Console</span>
+        <span>Admin</span>
       </Link>
     </nav>
   );

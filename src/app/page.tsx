@@ -16,11 +16,11 @@ export default async function HomePage() {
 
   return (
     <>
-      <Suspense fallback={<div className="h-[72px] border-b border-[#dce3da] bg-white" />}>
+      <Suspense fallback={<div className="h-[72px] border-b border-line bg-white" />}>
         <StoreHeader isAuthenticated={Boolean(session)} />
       </Suspense>
 
-      <Suspense fallback={<div className="site-wrap py-12 text-sm text-[#52625a]">Memuat katalog aplikasi...</div>}>
+      <Suspense fallback={<div className="site-wrap py-12 text-sm text-ink-2">Memuat katalog aplikasi...</div>}>
         <StudioCatalog apps={appsList} />
       </Suspense>
 

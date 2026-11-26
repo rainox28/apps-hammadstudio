@@ -2,10 +2,10 @@ import React from "react";
 import Link from "next/link";
 import { requireAdminPage } from "@/lib/auth";
 import { getAllAppsForAdmin, getStoreStatsForAdmin } from "@/db/queries";
-import { DashboardHeader } from "@/components/DashboardHeader";
-import { AppIcon } from "@/components/AppIcon";
-import { TrackBadge } from "@/components/TrackBadge";
+import { DashboardShell } from "@/components/DashboardShell";
 import { CopyTextButton } from "@/components/CopyTextButton";
+import { getAppReleaseStage } from "@/lib/constants";
+import { getStageLabel, getTileSrc } from "@/lib/app-art";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +17,12 @@ function formatShortDate(date: Date): string {
   }).format(new Date(date));
 }
 
+const STAGE_PILL = {
+  ready: "bg-accent-soft text-[#17694a]",
+  beta: "bg-[#fdf3de] text-[#7a4f00]",
+  soon: "bg-raised text-ink-2",
+} as const;
+
 export default async function DashboardPage() {
   const user = await requireAdminPage();
   const [appsList, stats] = await Promise.all([
@@ -24,237 +30,160 @@ export default async function DashboardPage() {
     getStoreStatsForAdmin(),
   ]);
 
-  return (
-    <div className="min-h-dvh flex flex-col bg-[#F8FAF9]">
-      <DashboardHeader userEmail={user.email} />
+  const statItems = [
+    { label: "Total aplikasi", value: stats.totalApps },
+    { label: "Tampil di store", value: stats.publishedApps },
+    { label: "Total rilis", value: stats.totalReleases },
+    { label: "Unduhan tercatat", value: stats.totalDownloads },
+  ];
 
-      <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+  return (
+    <DashboardShell userEmail={user.email}>
+      <main className="px-4 py-7 sm:px-8 lg:px-10 lg:py-8 max-w-[1180px]">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-[#111815] tracking-tight">
-              Daftar Aplikasi &amp; Rilis APK
-            </h1>
-            <p className="text-sm text-[#48544E] mt-1">
-              Kelola aplikasi prarilis, unggah ikon, banner 16:9, tangkapan layar via UploadThing, dan versi APK.
-            </p>
+            <h1 className="text-[1.75rem] font-extrabold tracking-[-0.02em]">Aplikasi</h1>
+            <p className="mt-1 text-sm text-ink-3">Kelola katalog dan rilis APK.</p>
           </div>
           <Link
             href="/dashboard/apps/new"
-            className="min-h-11 px-5 inline-flex items-center justify-center rounded-full bg-[#017A56] text-white text-sm font-semibold hover:bg-[#016346] tactile-press shrink-0"
+            className="min-h-11 px-5 inline-flex items-center gap-2 rounded-full bg-accent text-white text-sm font-bold hover:bg-accent-hover tactile-press"
           >
-            Tambah Aplikasi Baru
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden="true">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            Tambah aplikasi
           </Link>
         </div>
 
         <section
-          aria-label="Ringkasan data katalog"
-          className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3"
+          aria-label="Ringkasan katalog"
+          className="mt-6 grid grid-cols-2 lg:grid-cols-4 rounded-[16px] border border-line bg-white"
         >
-          <div className="rounded-2xl border border-[#E2E8E5] bg-white p-4">
-            <p className="text-xs font-medium text-[#48544E]">Total Aplikasi</p>
-            <p className="text-2xl font-bold text-[#111815] mt-1 tabular-nums">
-              {stats.totalApps}
-            </p>
-          </div>
-          <div className="rounded-2xl border border-[#E2E8E5] bg-white p-4">
-            <p className="text-xs font-medium text-[#48544E]">Dipublikasikan</p>
-            <p className="text-2xl font-bold text-[#017A56] mt-1 tabular-nums">
-              {stats.publishedApps}
-            </p>
-          </div>
-          <div className="rounded-2xl border border-[#E2E8E5] bg-white p-4">
-            <p className="text-xs font-medium text-[#48544E]">Total Versi Rilis</p>
-            <p className="text-2xl font-bold text-[#111815] mt-1 tabular-nums">
-              {stats.totalReleases}
-            </p>
-          </div>
-          <div className="rounded-2xl border border-[#E2E8E5] bg-white p-4">
-            <p className="text-xs font-medium text-[#48544E]">Unduhan Tercatat</p>
-            <p className="text-2xl font-bold text-[#111815] mt-1 tabular-nums">
-              {stats.totalDownloads}
-            </p>
-          </div>
+          {statItems.map((s, i) => (
+            <div
+              key={s.label}
+              className={`px-5 py-5 sm:px-6 border-line ${i % 2 === 1 ? "border-l" : ""} ${i >= 2 ? "border-t lg:border-t-0" : ""} ${i === 2 ? "lg:border-l" : ""}`}
+            >
+              <p className="text-[13px] text-ink-3">{s.label}</p>
+              <p className="mt-1.5 text-[1.75rem] font-extrabold tabular-nums">{s.value}</p>
+            </div>
+          ))}
         </section>
 
-        <section className="mt-6">
+        <section className="mt-6 overflow-hidden rounded-[16px] border border-line bg-white">
           {appsList.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-[#C8D3CC] bg-white px-6 py-12 text-center">
-              <p className="text-base font-bold text-[#111815]">
-                Belum ada aplikasi terdaftar
-              </p>
-              <p className="text-sm text-[#48544E] mt-1 max-w-md mx-auto">
-                Tambahkan aplikasi Android pertama Anda agar penguji dapat mengunduh APK sebelum rilis ke Google Play.
+            <div className="px-6 py-14 text-center">
+              <p className="text-base font-semibold">Belum ada aplikasi terdaftar</p>
+              <p className="mx-auto mt-1 max-w-md text-sm text-ink-3">
+                Tambahkan aplikasi Android pertama agar penguji bisa mengunduh APK sebelum rilis ke Google Play.
               </p>
               <Link
                 href="/dashboard/apps/new"
-                className="mt-5 min-h-11 px-5 inline-flex items-center justify-center rounded-full bg-[#017A56] text-white text-sm font-semibold hover:bg-[#016346]"
+                className="mt-5 min-h-11 px-5 inline-flex items-center rounded-full bg-accent text-white text-sm font-bold hover:bg-accent-hover"
               >
-                Tambah Aplikasi Pertama
+                Tambah aplikasi pertama
               </Link>
             </div>
           ) : (
-            <div className="rounded-2xl border border-[#E2E8E5] bg-white overflow-hidden play-card-elevation">
+            <>
+              <div className="flex items-center justify-between px-5 py-4 border-b border-line">
+                <h2 className="text-base font-bold">Semua aplikasi</h2>
+                <span className="text-[13px] text-ink-3">{appsList.length} aplikasi</span>
+              </div>
+
               <div className="hidden md:block overflow-x-auto">
-                <table className="w-full text-left border-collapse">
+                <table className="w-full min-w-[820px] border-collapse text-left text-sm">
                   <thead>
-                    <tr className="border-b border-[#E2E8E5] bg-[#F8FAF9] text-xs font-semibold text-[#48544E]">
-                      <th className="py-3 px-4">Aplikasi</th>
-                      <th className="py-3 px-4">Rilis Terbaru</th>
-                      <th className="py-3 px-4">Status</th>
-                      <th className="py-3 px-4">Unduhan</th>
-                      <th className="py-3 px-4">Diperbarui</th>
-                      <th className="py-3 px-4 text-right">Aksi</th>
+                    <tr className="text-xs text-ink-3">
+                      <th className="px-5 py-3 font-semibold">Aplikasi</th>
+                      <th className="px-5 py-3 font-semibold">Status</th>
+                      <th className="px-5 py-3 font-semibold">Rilis terbaru</th>
+                      <th className="px-5 py-3 font-semibold">Unduhan</th>
+                      <th className="px-5 py-3 font-semibold">Diperbarui</th>
+                      <th className="px-5 py-3 font-semibold">Tampil</th>
+                      <th className="px-5 py-3"><span className="sr-only">Aksi</span></th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E2E8E5] text-sm">
-                    {appsList.map((app) => (
-                      <tr key={app.id} className="hover:bg-[#FAFDFB] transition-colors">
-                        <td className="py-3.5 px-4">
-                          <div className="flex items-center gap-3 min-w-0">
-                            <AppIcon
-                              name={app.name}
-                              iconUrl={app.iconUrl}
-                              skin={app.themeSkin}
-                              size="sm"
-                            />
-                            <div className="min-w-0">
-                              <p className="font-bold text-[#111815] truncate">
-                                {app.name}
-                              </p>
-                              <p className="text-xs font-mono text-[#48544E] truncate">
-                                {app.packageName}
-                              </p>
+                  <tbody>
+                    {appsList.map((app) => {
+                      const stage = getAppReleaseStage(app.latestRelease);
+                      return (
+                        <tr key={app.id} className="border-t border-line hover:bg-[#fafbf9]">
+                          <td className="px-5 py-3.5">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <img src={getTileSrc(app)} alt="" width={44} height={44} className="w-11 h-11 rounded-[11px] object-cover shrink-0" />
+                              <div className="min-w-0">
+                                <p className="font-semibold truncate">{app.name}</p>
+                                <p className="font-mono text-xs text-ink-3 truncate">{app.packageName}</p>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-4">
-                          {app.latestRelease ? (
-                            <div className="flex items-center gap-2">
-                              <span className="font-semibold text-[#111815] tabular-nums">
-                                v{app.latestRelease.versionName}
-                              </span>
-                              <TrackBadge track={app.latestRelease.track} />
-                            </div>
-                          ) : (
-                            <span className="text-xs text-[#48544E]">
-                              Belum ada rilis
+                          </td>
+                          <td className="px-5 py-3.5">
+                            <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${STAGE_PILL[stage]}`}>
+                              <span aria-hidden="true" className="status-dot" data-stage={stage} />
+                              {getStageLabel(stage)}
                             </span>
-                          )}
-                        </td>
-                        <td className="py-3.5 px-4">
-                          <span
-                            className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold border ${
-                              app.isPublished
-                                ? "bg-[#E6F4EE] text-[#017A56] border-[#B7DFCE]"
-                                : "bg-[#F8FAF9] text-[#48544E] border-[#E2E8E5]"
-                            }`}
-                          >
-                            {app.isPublished ? "Publik" : "Draft"}
-                          </span>
-                        </td>
-                        <td className="py-3.5 px-4 tabular-nums font-medium text-[#111815]">
-                          {app.downloadCount}
-                        </td>
-                        <td className="py-3.5 px-4 text-xs text-[#48544E]">
-                          {formatShortDate(app.updatedAt)}
-                        </td>
-                        <td className="py-3.5 px-4 text-right">
-                          <div className="inline-flex items-center gap-2">
-                            {app.isPublished && (
-                              <>
+                          </td>
+                          <td className="px-5 py-3.5 font-mono text-[13px]">
+                            {app.latestRelease ? `v${app.latestRelease.versionName}` : <span className="font-sans text-ink-3">Belum ada</span>}
+                          </td>
+                          <td className="px-5 py-3.5 tabular-nums">{app.downloadCount}</td>
+                          <td className="px-5 py-3.5 text-ink-3">{formatShortDate(app.updatedAt)}</td>
+                          <td className="px-5 py-3.5 text-ink-3">{app.isPublished ? "Ya" : "Draf"}</td>
+                          <td className="px-5 py-3.5">
+                            <div className="flex items-center justify-end gap-2">
+                              {app.isPublished && (
                                 <CopyTextButton
                                   value={`/apps/${app.slug}`}
                                   relativePath
-                                  label="Salin Link"
-                                  className="min-h-10 px-3 inline-flex items-center rounded-full border border-[#E2E8E5] text-xs font-semibold text-[#48544E] hover:text-[#111815] hover:bg-[#F8FAF9]"
+                                  label="Salin link"
+                                  className="min-h-9 px-3 rounded-full text-xs font-semibold text-ink-3 hover:bg-raised hover:text-ink"
                                 />
-                                <Link
-                                  href={`/apps/${app.slug}`}
-                                  className="min-h-10 px-3 inline-flex items-center rounded-full border border-[#E2E8E5] text-xs font-semibold text-[#48544E] hover:text-[#111815] hover:bg-[#F8FAF9]"
-                                >
-                                  Store
-                                </Link>
-                              </>
-                            )}
-                            <Link
-                              href={`/dashboard/apps/${app.id}`}
-                              className="min-h-10 px-4 inline-flex items-center rounded-full bg-[#017A56] text-white text-xs font-semibold hover:bg-[#016346] tactile-press"
-                            >
-                              Kelola &amp; Rilis
-                            </Link>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                              )}
+                              <Link
+                                href={`/dashboard/apps/${app.id}`}
+                                className="min-h-9 px-4 inline-flex items-center rounded-full border border-line text-[13px] font-semibold text-accent hover:border-accent"
+                              >
+                                Kelola
+                              </Link>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
 
-              <div className="md:hidden divide-y divide-[#E2E8E5]">
-                {appsList.map((app) => (
-                  <div key={app.id} className="p-4 space-y-3">
-                    <div className="flex items-start gap-3">
-                      <AppIcon name={app.name} iconUrl={app.iconUrl} size="sm" />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2">
-                          <p className="font-bold text-[#111815] truncate">
-                            {app.name}
-                          </p>
-                          <span
-                            className={`shrink-0 px-2 py-0.5 rounded text-xs font-semibold border ${
-                              app.isPublished
-                                ? "bg-[#E6F4EE] text-[#017A56] border-[#B7DFCE]"
-                                : "bg-[#F8FAF9] text-[#48544E] border-[#E2E8E5]"
-                            }`}
-                          >
-                            {app.isPublished ? "Publik" : "Draft"}
-                          </span>
-                        </div>
-                        <p className="text-xs font-mono text-[#48544E] truncate mt-0.5">
-                          {app.packageName}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#48544E]">
-                      <div className="flex items-center gap-2">
-                        {app.latestRelease ? (
-                          <>
-                            <span className="font-semibold text-[#111815]">
-                              v{app.latestRelease.versionName}
+              <ul className="md:hidden divide-y divide-line">
+                {appsList.map((app) => {
+                  const stage = getAppReleaseStage(app.latestRelease);
+                  return (
+                    <li key={app.id}>
+                      <Link href={`/dashboard/apps/${app.id}`} className="flex items-center gap-3 px-4 py-3.5">
+                        <img src={getTileSrc(app)} alt="" width={48} height={48} className="w-12 h-12 rounded-[12px] object-cover shrink-0" />
+                        <span className="flex-1 min-w-0">
+                          <span className="block font-semibold truncate">{app.name}</span>
+                          <span className="flex items-center gap-2 text-xs text-ink-3">
+                            <span className="inline-flex items-center gap-1.5">
+                              <span aria-hidden="true" className="status-dot" data-stage={stage} />
+                              {getStageLabel(stage)}
                             </span>
-                            <TrackBadge track={app.latestRelease.track} />
-                          </>
-                        ) : (
-                          <span>Belum ada APK</span>
-                        )}
-                      </div>
-                      <span className="tabular-nums">{app.downloadCount} unduhan</span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <Link
-                        href={`/dashboard/apps/${app.id}`}
-                        className="flex-1 min-h-11 px-3 inline-flex items-center justify-center rounded-full bg-[#017A56] text-white text-xs font-semibold hover:bg-[#016346]"
-                      >
-                        Kelola &amp; Rilis
+                            {app.latestRelease && <span className="font-mono">v{app.latestRelease.versionName}</span>}
+                            {!app.isPublished && <span>· Draf</span>}
+                          </span>
+                        </span>
+                        <span className="text-[13px] font-semibold text-accent">Kelola</span>
                       </Link>
-                      {app.isPublished && (
-                        <Link
-                          href={`/apps/${app.slug}`}
-                          className="min-h-11 px-4 inline-flex items-center justify-center rounded-full border border-[#C8D3CC] text-xs font-semibold text-[#111815]"
-                        >
-                          Store
-                        </Link>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </>
           )}
         </section>
       </main>
-    </div>
+    </DashboardShell>
   );
 }

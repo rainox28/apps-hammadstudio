@@ -37,11 +37,11 @@ export function ScreenshotGallery({ appName, screenshots }: ScreenshotGalleryPro
 
   if (screenshots.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-[#C8D3CC] bg-[#F5F7F6] px-5 py-8 text-center">
-        <p className="text-sm font-medium text-[#141917]">
+      <div className="rounded-xl border border-dashed border-line-strong bg-raised px-5 py-8 text-center">
+        <p className="text-sm font-medium text-ink">
           Belum ada tangkapan layar
         </p>
-        <p className="text-xs text-[#49544E] mt-1">
+        <p className="text-xs text-ink-2 mt-1">
           Pengelola dapat menambahkan pratinjau layar aplikasi melalui Dashboard.
         </p>
       </div>
@@ -51,8 +51,8 @@ export function ScreenshotGallery({ appName, screenshots }: ScreenshotGalleryPro
   return (
     <div>
       <div className="flex items-center justify-between gap-2 mb-3">
-        <h2 className="text-base sm:text-lg font-bold text-[#141917]">
-          Tangkapan Layar
+        <h2 className="text-base sm:text-lg font-semibold text-ink">
+          Tangkapan layar
         </h2>
         {screenshots.length > 1 && (
           <div className="flex items-center gap-2">
@@ -60,7 +60,7 @@ export function ScreenshotGallery({ appName, screenshots }: ScreenshotGalleryPro
               type="button"
               onClick={() => scrollByDirection(-1)}
               aria-label="Geser tangkapan layar ke kiri"
-              className="min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg border border-[#E4EAE6] bg-white text-sm font-medium text-[#141917] hover:bg-[#F5F7F6]"
+              className="min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg border border-line bg-white text-sm font-medium text-ink hover:bg-raised"
             >
               Prev
             </button>
@@ -68,7 +68,7 @@ export function ScreenshotGallery({ appName, screenshots }: ScreenshotGalleryPro
               type="button"
               onClick={() => scrollByDirection(1)}
               aria-label="Geser tangkapan layar ke kanan"
-              className="min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg border border-[#E4EAE6] bg-white text-sm font-medium text-[#141917] hover:bg-[#F5F7F6]"
+              className="min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg border border-line bg-white text-sm font-medium text-ink hover:bg-raised"
             >
               Next
             </button>
@@ -86,7 +86,7 @@ export function ScreenshotGallery({ appName, screenshots }: ScreenshotGalleryPro
             type="button"
             onClick={() => setActiveIndex(idx)}
             aria-label={`Perbesar tangkapan layar ${idx + 1} dari ${appName}`}
-            className="shrink-0 snap-start rounded-xl overflow-hidden border border-[#E4EAE6] bg-[#F5F7F6] hover:border-[#017A56] transition-colors tactile-press"
+            className="shrink-0 snap-start rounded-xl overflow-hidden border border-line bg-raised hover:border-accent transition-colors tactile-press"
           >
             <img
               src={url}
@@ -105,7 +105,7 @@ export function ScreenshotGallery({ appName, screenshots }: ScreenshotGalleryPro
           role="dialog"
           aria-modal="true"
           aria-label={`Pratinjau tangkapan layar ${activeIndex + 1}`}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#141917]/80"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/80"
           onClick={() => setActiveIndex(null)}
         >
           <div
@@ -119,7 +119,7 @@ export function ScreenshotGallery({ appName, screenshots }: ScreenshotGalleryPro
               <button
                 type="button"
                 onClick={() => setActiveIndex(null)}
-                className="min-h-11 px-4 rounded-lg bg-white text-[#141917] text-sm font-semibold"
+                className="min-h-11 px-4 rounded-lg bg-white text-ink text-sm font-semibold"
               >
                 Tutup
               </button>

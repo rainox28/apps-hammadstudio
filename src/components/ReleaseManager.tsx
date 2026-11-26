@@ -140,11 +140,11 @@ export function ReleaseManager({ appId, releases }: ReleaseManagerProps) {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-2xl border border-[#E4EAE6] bg-white p-5 sm:p-6">
-        <h2 className="text-base sm:text-lg font-bold text-[#141917]">
-          Tambah Rilis APK Baru
+      <section className="rounded-[16px] border border-line bg-white p-5 sm:p-7">
+        <h2 className="text-base sm:text-lg font-semibold text-ink">
+          Tambah rilis APK
         </h2>
-        <p className="text-xs sm:text-sm text-[#49544E] mt-1">
+        <p className="text-xs sm:text-sm text-ink-2 mt-1">
           Tempel tautan langsung file .apk (seperti storage server Anda) atau unggah file .apk lewat UploadThing.
         </p>
 
@@ -161,7 +161,7 @@ export function ReleaseManager({ appId, releases }: ReleaseManagerProps) {
         {successMsg && (
           <div
             role="status"
-            className="mt-4 rounded-xl border border-[#B7DFCE] bg-[#E6F4EE] px-4 py-3 text-sm font-medium text-[#017A56]"
+            className="mt-4 rounded-[12px] bg-accent-soft px-4 py-3 text-sm font-medium text-accent"
           >
             {successMsg}
           </div>
@@ -170,7 +170,7 @@ export function ReleaseManager({ appId, releases }: ReleaseManagerProps) {
         {uploadStatus && !error && (
           <div
             role="status"
-            className="mt-4 rounded-xl border border-[#E4EAE6] bg-[#F5F7F6] px-4 py-2.5 text-xs font-medium text-[#141917]"
+            className="mt-4 rounded-xl border border-line bg-raised px-4 py-2.5 text-xs font-medium text-ink"
           >
             {uploadStatus}
           </div>
@@ -181,9 +181,9 @@ export function ReleaseManager({ appId, releases }: ReleaseManagerProps) {
             <div>
               <label
                 htmlFor="rel-version-name"
-                className="block text-sm font-semibold text-[#141917] mb-1.5"
+                className="block text-sm font-semibold text-ink mb-1.5"
               >
-                Version Name
+                Nama versi
               </label>
               <input
                 id="rel-version-name"
@@ -192,16 +192,16 @@ export function ReleaseManager({ appId, releases }: ReleaseManagerProps) {
                 value={versionName}
                 onChange={(e) => setVersionName(e.target.value)}
                 placeholder="0.7.1"
-                className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] text-sm text-[#141917] focus:border-[#017A56] focus:outline-none"
+                className="w-full h-11 px-3.5 rounded-xl border border-line-strong text-sm text-ink focus:border-accent focus:outline-none"
               />
             </div>
 
             <div>
               <label
                 htmlFor="rel-version-code"
-                className="block text-sm font-semibold text-[#141917] mb-1.5"
+                className="block text-sm font-semibold text-ink mb-1.5"
               >
-                Version Code
+                Kode versi
               </label>
               <input
                 id="rel-version-code"
@@ -210,22 +210,22 @@ export function ReleaseManager({ appId, releases }: ReleaseManagerProps) {
                 min={1}
                 value={versionCode}
                 onChange={(e) => setVersionCode(e.target.value)}
-                className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] text-sm text-[#141917] focus:border-[#017A56] focus:outline-none"
+                className="w-full h-11 px-3.5 rounded-xl border border-line-strong text-sm text-ink focus:border-accent focus:outline-none"
               />
             </div>
 
             <div>
               <label
                 htmlFor="rel-track"
-                className="block text-sm font-semibold text-[#141917] mb-1.5"
+                className="block text-sm font-semibold text-ink mb-1.5"
               >
-                Track Rilis
+                Jalur rilis
               </label>
               <select
                 id="rel-track"
                 value={track}
                 onChange={(e) => setTrack(e.target.value)}
-                className="w-full h-11 px-3 rounded-xl border border-[#C8D3CC] bg-white text-sm text-[#141917] focus:border-[#017A56] focus:outline-none"
+                className="w-full h-11 px-3 rounded-xl border border-line-strong bg-white text-sm text-ink focus:border-accent focus:outline-none"
               >
                 {RELEASE_TRACKS.map((t) => (
                   <option key={t.value} value={t.value}>
@@ -240,13 +240,13 @@ export function ReleaseManager({ appId, releases }: ReleaseManagerProps) {
             <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
               <label
                 htmlFor="rel-apk-url"
-                className="text-sm font-semibold text-[#141917]"
+                className="text-sm font-semibold text-ink"
               >
-                URL File APK
+                URL file APK
               </label>
               <label
                 htmlFor="rel-apk-upload"
-                className="min-h-9 px-3 inline-flex items-center rounded-lg border border-[#C8D3CC] bg-[#F5F7F6] text-xs font-semibold text-[#141917] hover:border-[#017A56]"
+                className="min-h-9 px-3 inline-flex items-center rounded-lg border border-line-strong bg-raised text-xs font-semibold text-ink hover:border-accent"
               >
                 {isUploadingApk ? "Mengunggah APK..." : "Atau Unggah .apk"}
               </label>
@@ -266,7 +266,7 @@ export function ReleaseManager({ appId, releases }: ReleaseManagerProps) {
               value={apkUrl}
               onChange={(e) => setApkUrl(e.target.value)}
               placeholder="https://martabak.hammad.studio/storage/releases/app-v0.7.0.apk"
-              className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] text-sm font-mono text-[#141917] focus:border-[#017A56] focus:outline-none"
+              className="w-full h-11 px-3.5 rounded-xl border border-line-strong text-sm font-mono text-ink focus:border-accent focus:outline-none"
             />
           </div>
 
@@ -274,9 +274,9 @@ export function ReleaseManager({ appId, releases }: ReleaseManagerProps) {
             <div>
               <label
                 htmlFor="rel-size"
-                className="block text-sm font-semibold text-[#141917] mb-1.5"
+                className="block text-sm font-semibold text-ink mb-1.5"
               >
-                Label Ukuran File
+                Label ukuran file
               </label>
               <input
                 id="rel-size"
@@ -285,14 +285,14 @@ export function ReleaseManager({ appId, releases }: ReleaseManagerProps) {
                 value={fileSizeLabel}
                 onChange={(e) => setFileSizeLabel(e.target.value)}
                 placeholder="24.5 MB"
-                className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] text-sm text-[#141917] focus:border-[#017A56] focus:outline-none"
+                className="w-full h-11 px-3.5 rounded-xl border border-line-strong text-sm text-ink focus:border-accent focus:outline-none"
               />
             </div>
 
             <div>
               <label
                 htmlFor="rel-sha"
-                className="block text-sm font-semibold text-[#141917] mb-1.5"
+                className="block text-sm font-semibold text-ink mb-1.5"
               >
                 SHA-256 Checksum (opsional)
               </label>
@@ -302,7 +302,7 @@ export function ReleaseManager({ appId, releases }: ReleaseManagerProps) {
                 value={sha256}
                 onChange={(e) => setSha256(e.target.value)}
                 placeholder="Opsional untuk verifikasi integritas"
-                className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] text-sm font-mono text-[#141917] focus:border-[#017A56] focus:outline-none"
+                className="w-full h-11 px-3.5 rounded-xl border border-line-strong text-sm font-mono text-ink focus:border-accent focus:outline-none"
               />
             </div>
           </div>
@@ -310,7 +310,7 @@ export function ReleaseManager({ appId, releases }: ReleaseManagerProps) {
           <div>
             <label
               htmlFor="rel-notes"
-              className="block text-sm font-semibold text-[#141917] mb-1.5"
+              className="block text-sm font-semibold text-ink mb-1.5"
             >
               Catatan Rilis (What&apos;s New)
             </label>
@@ -321,13 +321,13 @@ export function ReleaseManager({ appId, releases }: ReleaseManagerProps) {
               value={releaseNotes}
               onChange={(e) => setReleaseNotes(e.target.value)}
               placeholder="Perbaikan bug atau fitur baru di versi ini..."
-              className="w-full p-3.5 rounded-xl border border-[#C8D3CC] text-sm text-[#141917] focus:border-[#017A56] focus:outline-none"
+              className="w-full p-3.5 rounded-xl border border-line-strong text-sm text-ink focus:border-accent focus:outline-none"
             />
           </div>
 
           <label
             htmlFor="rel-is-latest"
-            className="flex items-center gap-2.5 min-h-11 text-sm font-medium text-[#141917]"
+            className="flex items-center gap-2.5 min-h-11 text-sm font-medium text-ink"
           >
             <input
               id="rel-is-latest"
@@ -342,19 +342,19 @@ export function ReleaseManager({ appId, releases }: ReleaseManagerProps) {
           <button
             type="submit"
             disabled={submitting || isUploadingApk}
-            className="min-h-11 px-5 rounded-xl bg-[#017A56] text-white text-sm font-semibold hover:bg-[#016346] disabled:opacity-60 tactile-press"
+            className="min-h-11 px-6 rounded-full bg-night text-white text-sm font-bold hover:bg-accent-hover disabled:opacity-60 tactile-press"
           >
             {submitting ? "Menambahkan Rilis..." : "Publikasikan Rilis APK"}
           </button>
         </form>
       </section>
 
-      <section className="rounded-2xl border border-[#E4EAE6] bg-white p-5 sm:p-6">
-        <h3 className="text-base font-bold text-[#141917]">
+      <section className="rounded-[16px] border border-line bg-white p-5 sm:p-7">
+        <h3 className="text-base font-semibold text-ink">
           Daftar Versi Terunggah ({releases.length})
         </h3>
         {releases.length === 0 ? (
-          <p className="text-sm text-[#49544E] mt-2">
+          <p className="text-sm text-ink-2 mt-2">
             Belum ada rilis APK untuk aplikasi ini. Tambahkan rilis pertama di formulir atas.
           </p>
         ) : (
@@ -362,27 +362,27 @@ export function ReleaseManager({ appId, releases }: ReleaseManagerProps) {
             {releases.map((rel) => (
               <div
                 key={rel.id}
-                className="rounded-xl border border-[#E4EAE6] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                className="rounded-xl border border-line p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
               >
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="font-bold text-sm text-[#141917]">
+                    <span className="font-semibold text-sm text-ink">
                       v{rel.versionName}
                     </span>
-                    <span className="text-xs font-mono text-[#49544E]">
+                    <span className="text-xs font-mono text-ink-2">
                       code {rel.versionCode}
                     </span>
                     <TrackBadge track={rel.track} />
                     {rel.isLatest && (
-                      <span className="text-xs font-semibold text-[#017A56]">
-                        Aktif Terbaru
+                      <span className="text-xs font-semibold text-accent">
+                        Terbaru
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-[#49544E] mt-1">
+                  <p className="text-xs text-ink-2 mt-1">
                     {rel.fileSizeLabel} · {rel.downloadCount} unduhan
                   </p>
-                  <p className="text-xs font-mono text-[#49544E] truncate mt-1">
+                  <p className="text-xs font-mono text-ink-2 truncate mt-1">
                     {rel.apkUrl}
                   </p>
                 </div>
@@ -392,14 +392,14 @@ export function ReleaseManager({ appId, releases }: ReleaseManagerProps) {
                     <button
                       type="button"
                       onClick={() => handleSetLatest(rel.id)}
-                      className="min-h-11 px-3 rounded-lg border border-[#C8D3CC] text-xs font-semibold text-[#141917] hover:border-[#017A56] hover:text-[#017A56]"
+                      className="min-h-11 px-3 rounded-lg border border-line-strong text-xs font-semibold text-ink hover:border-accent hover:text-accent"
                     >
-                      Jadikan Terbaru
+                      Jadikan terbaru
                     </button>
                   )}
                   <a
                     href={`/api/releases/${rel.id}/download`}
-                    className="min-h-11 px-3 inline-flex items-center rounded-lg border border-[#E4EAE6] text-xs font-semibold text-[#141917] hover:bg-[#F5F7F6]"
+                    className="min-h-11 px-3 inline-flex items-center rounded-lg border border-line text-xs font-semibold text-ink hover:bg-raised"
                   >
                     Unduh
                   </a>

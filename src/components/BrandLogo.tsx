@@ -12,7 +12,7 @@ export function BrandLogo({ size = 34, className = "" }: BrandLogoProps) {
       alt="Logo apps.hammad.studio"
       width={size}
       height={size}
-      className={`shrink-0 rounded-[22%] object-cover border border-[#E2E8E5] bg-[#0D1513] ${className}`}
+      className={`shrink-0 rounded-[22%] object-cover bg-[#0d1513] ${className}`}
     />
   );
 }

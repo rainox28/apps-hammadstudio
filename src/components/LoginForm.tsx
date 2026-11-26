@@ -39,11 +39,11 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       {error && (
         <div
           role="alert"
-          className="rounded-xl border border-[#FCA5A5] bg-[#FEF2F2] px-4 py-3 text-sm text-[#991B1B]"
+          className="rounded-[10px] bg-[#FBECEA] px-4 py-3 text-sm text-[#A3261B]"
         >
           <span className="font-semibold">Gagal masuk: </span>
           {error}
@@ -53,9 +53,9 @@ export function LoginForm() {
       <div>
         <label
           htmlFor="login-email"
-          className="block text-sm font-semibold text-[#141917] mb-1.5"
+          className="block text-[13px] font-semibold text-ink mb-2"
         >
-          Email Admin
+          Email
         </label>
         <input
           id="login-email"
@@ -65,16 +65,16 @@ export function LoginForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="admin@hammad.studio"
-          className="w-full h-11 px-3.5 rounded-xl border border-[#C8D3CC] bg-white text-sm text-[#141917] placeholder:text-[#49544E]/70 focus:border-[#017A56] focus:outline-none"
+          className="w-full h-12 px-4 rounded-[12px] border border-line-strong bg-white text-sm text-ink placeholder:text-ink-3 focus:border-accent focus:outline-none focus:ring-3 focus:ring-glow/40"
         />
       </div>
 
       <div>
         <label
           htmlFor="login-password"
-          className="block text-sm font-semibold text-[#141917] mb-1.5"
+          className="block text-[13px] font-semibold text-ink mb-2"
         >
-          Kata Sandi
+          Kata sandi
         </label>
         <div className="relative flex items-center">
           <input
@@ -85,12 +85,12 @@ export function LoginForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Masukkan kata sandi"
-            className="w-full h-11 pl-3.5 pr-24 rounded-xl border border-[#C8D3CC] bg-white text-sm text-[#141917] placeholder:text-[#49544E]/70 focus:border-[#017A56] focus:outline-none"
+            className="w-full h-12 pl-4 pr-24 rounded-[12px] border border-line-strong bg-white text-sm text-ink placeholder:text-ink-3 focus:border-accent focus:outline-none focus:ring-3 focus:ring-glow/40"
           />
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute right-1.5 h-8 px-3 rounded-lg text-xs font-semibold text-[#49544E] hover:bg-[#F5F7F6] hover:text-[#141917]"
+            className="absolute right-2 h-8 px-3 rounded-full text-xs font-semibold text-ink-2 hover:bg-raised hover:text-ink"
           >
             {showPassword ? "Sembunyi" : "Tampilkan"}
           </button>
@@ -100,9 +100,9 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full h-11 rounded-xl bg-[#017A56] text-white text-sm font-semibold hover:bg-[#016346] disabled:opacity-60 tactile-press"
+        className="w-full h-[50px] rounded-full bg-accent text-white text-[15px] font-bold hover:bg-accent-hover disabled:opacity-60 tactile-press"
       >
-        {loading ? "Memeriksa akun..." : "Masuk ke Dashboard"}
+        {loading ? "Memeriksa akun…" : "Masuk"}
       </button>
     </form>
   );
