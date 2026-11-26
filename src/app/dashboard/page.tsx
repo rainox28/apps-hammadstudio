@@ -111,7 +111,12 @@ export default async function DashboardPage() {
                       <tr key={app.id} className="hover:bg-[#FAFDFB] transition-colors">
                         <td className="py-3.5 px-4">
                           <div className="flex items-center gap-3 min-w-0">
-                            <AppIcon name={app.name} iconUrl={app.iconUrl} size="sm" />
+                            <AppIcon
+                              name={app.name}
+                              iconUrl={app.iconUrl}
+                              skin={app.themeSkin}
+                              size="sm"
+                            />
                             <div className="min-w-0">
                               <p className="font-bold text-[#111815] truncate">
                                 {app.name}

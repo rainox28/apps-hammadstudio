@@ -3,34 +3,25 @@ import { BrandLogo } from "./BrandLogo";
 
 export function StoreFooter() {
   return (
-    <footer className="mt-auto border-t border-[#E2E8E5] bg-[#F8FAF9]">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
-        <div className="flex items-center gap-3">
-          <BrandLogo size={32} />
-          <div>
-            <p className="text-sm font-bold text-[#111815]">apps.hammad.studio</p>
-            <p className="text-xs text-[#48544E] mt-0.5">
-              Pusat unduhan APK Android prarilis untuk klien &amp; penguji sebelum rilis Google Play.
-            </p>
-          </div>
+    <footer className="mt-auto border-t border-[#dde4d9] mb-16 sm:mb-0">
+      <div className="site-wrap py-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[13px] text-[#52625a]">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <BrandLogo size={26} />
+          <span>
+            <strong className="text-[#26392c] font-bold">Studio Apps</strong>
+            <span className="px-2 text-[#889286]">·</span>
+            Hammad Studio
+          </span>
         </div>
-        <div className="flex flex-wrap items-center gap-5 text-sm">
-          <Link
-            href="/"
-            className="min-h-11 inline-flex items-center text-[#48544E] hover:text-[#111815] font-medium"
-          >
+
+        <div className="flex flex-wrap items-center gap-4">
+          <Link href="/" className="min-h-11 inline-flex items-center font-semibold hover:underline">
             Katalog
           </Link>
-          <Link
-            href="/panduan"
-            className="min-h-11 inline-flex items-center text-[#48544E] hover:text-[#111815] font-medium"
-          >
-            Panduan Pasang APK
+          <Link href="/panduan" className="min-h-11 inline-flex items-center font-semibold hover:underline">
+            Panduan instalasi
           </Link>
-          <Link
-            href="/dashboard"
-            className="min-h-11 inline-flex items-center text-[#48544E] hover:text-[#111815] font-medium"
-          >
+          <Link href="/dashboard" className="min-h-11 inline-flex items-center font-semibold hover:underline">
             Studio Console
           </Link>
         </div>

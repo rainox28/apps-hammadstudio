@@ -1,5 +1,15 @@
 import { z } from "zod";
 
+const mediaPathOrUrl = z
+  .string()
+  .refine(
+    (val) => !val || val.startsWith("/") || /^https?:\/\//.test(val),
+    "URL atau path media tidak valid."
+  )
+  .nullable()
+  .optional()
+  .or(z.literal(""));
+
 export const loginSchema = z.object({
   email: z.string().email("Masukkan alamat email yang valid."),
   password: z.string().min(6, "Kata sandi minimal 6 karakter."),
@@ -21,9 +31,20 @@ export const appInputSchema = z.object({
   tagline: z.string().min(4, "Tagline minimal 4 karakter.").max(140),
   description: z.string().min(10, "Deskripsi aplikasi minimal 10 karakter.").max(5000),
   category: z.string().min(2, "Kategori wajib dipilih."),
-  iconUrl: z.string().url("URL ikon tidak valid.").nullable().optional().or(z.literal("")),
-  bannerUrl: z.string().url("URL banner tidak valid.").nullable().optional().or(z.literal("")),
-  screenshots: z.array(z.string().url("URL tangkapan layar tidak valid.")).max(12).default([]),
+  themeSkin: z.enum(["emerald", "amber", "sky", "plum"]).default("emerald"),
+  iconUrl: mediaPathOrUrl,
+  bannerUrl: mediaPathOrUrl,
+  screenshots: z
+    .array(
+      z.string().refine(
+        (val) => val.startsWith("/") || /^https?:\/\//.test(val),
+        "URL tangkapan layar tidak valid."
+      )
+    )
+    .max(12)
+    .default([]),
+  features: z.array(z.string().min(1).max(160)).max(10).default([]),
+  testerNote: z.string().max(500).nullable().optional().or(z.literal("")),
   minAndroid: z.string().min(2).max(40).default("Android 8.0+"),
   isPublished: z.boolean().default(true),
   isFeatured: z.boolean().default(false),

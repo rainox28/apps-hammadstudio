@@ -5,7 +5,7 @@ import "./globals.css";
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -15,9 +15,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "apps.hammad.studio | Katalog Prarilis & APK Resmi Hammad Studio",
+  title: "Studio Apps | Katalog Android Hammad Studio",
   description:
-    "Platform distribusi APK Android resmi dari proyek Hammad Studio untuk penguji dan klien sebelum rilis ke Google Play.",
+    "Jelajahi aplikasi Android dari Hammad Studio, unduh APK prarilis, dan dapatkan akses ke program beta sebelum rilis Google Play.",
 };
 
 export default function RootLayout({
@@ -30,7 +30,7 @@ export default function RootLayout({
       lang="id"
       className={`${plusJakarta.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-white text-[#141917]">
+      <body className="min-h-full flex flex-col bg-[#fafbf8] text-[#18221c]">
         {children}
       </body>
     </html>

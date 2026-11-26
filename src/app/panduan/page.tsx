@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getSession } from "@/lib/auth";
 import { StoreHeader } from "@/components/StoreHeader";
 import { StoreFooter } from "@/components/StoreFooter";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
 
 export const dynamic = "force-dynamic";
 
@@ -11,56 +12,98 @@ export default async function InstallGuidePage() {
 
   return (
     <>
-      <Suspense fallback={<div className="h-16 border-b border-[#E4EAE6] bg-white" />}>
+      <Suspense fallback={<div className="h-[72px] border-b border-[#dce3da] bg-white" />}>
         <StoreHeader isAuthenticated={Boolean(session)} />
       </Suspense>
 
-      <main className="flex-1 w-full max-w-3xl mx-auto px-4 sm:px-6 py-8">
-        <Link
-          href="/"
-          className="inline-flex items-center min-h-11 text-sm font-semibold text-[#017A56] hover:underline"
-        >
-          Kembali ke Katalog
-        </Link>
+      <main className="site-wrap flex-1 py-8">
+        <div className="max-w-2xl">
+          <Link
+            href="/"
+            className="inline-flex items-center min-h-11 text-sm font-bold text-[#006c4c] hover:underline"
+          >
+            Kembali ke Katalog
+          </Link>
 
-        <h1 className="text-2xl sm:text-3xl font-bold text-[#141917] mt-2 tracking-tight">
-          Panduan Memasang File APK di Android
-        </h1>
-        <p className="text-sm sm:text-base text-[#49544E] mt-2 leading-relaxed">
-          Aplikasi di platform ini adalah build prarilis resmi dari Hammad Studio yang didistribusikan sebelum publikasi di Google Play Store.
-        </p>
+          <div className="mt-3 rounded-[22px] border border-[#dce3da] bg-white p-6 sm:p-8">
+            <span className="w-12 h-12 rounded-[14px] bg-[#deebd5] text-[#2d6848] grid place-items-center mb-4">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                <rect x="6.3" y="2.5" width="11.4" height="19" rx="2.7" />
+                <path d="M10.5 5h3m-2.1 13.7h1.2" />
+              </svg>
+            </span>
 
-        <div className="mt-7 space-y-4">
-          <section className="rounded-2xl border border-[#E4EAE6] bg-white p-5">
-            <h2 className="text-base font-bold text-[#141917]">
-              1. Unduh file APK dari halaman aplikasi
-            </h2>
-            <p className="text-sm text-[#49544E] mt-1.5 leading-relaxed">
-              Buka halaman detail aplikasi, lalu tekan tombol Unduh APK. Jika membuka dari komputer, gunakan tombol Scan QR di HP agar file langsung terunduh di perangkat Android.
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#18221c] tracking-[-0.04em]">
+              Pasang APK di Android
+            </h1>
+            <p className="text-sm sm:text-base text-[#52625a] mt-2 leading-relaxed">
+              Ikuti langkah berikut untuk memasang build prarilis resmi dari Studio Apps sebelum dipublikasikan ke Google Play Store.
             </p>
-          </section>
 
-          <section className="rounded-2xl border border-[#E4EAE6] bg-white p-5">
-            <h2 className="text-base font-bold text-[#141917]">
-              2. Izinkan pemasangan dari browser atau pengelola file
-            </h2>
-            <p className="text-sm text-[#49544E] mt-1.5 leading-relaxed">
-              Saat membuka file .apk untuk pertama kali, Android akan meminta izin pemasangan aplikasi dari sumber ini (misalnya Chrome atau File Manager). Pilih Setelan, lalu aktifkan Izinkan dari sumber ini.
-            </p>
-          </section>
+            <ol className="mt-6 space-y-4">
+              <li className="grid grid-cols-[30px_1fr] gap-3 items-start">
+                <span className="w-7 h-7 rounded-lg bg-[#e9f1e4] text-[#275136] text-xs font-extrabold grid place-items-center mt-0.5">
+                  1
+                </span>
+                <div>
+                  <strong className="text-sm sm:text-base font-bold text-[#18221c]">
+                    Unduh APK di HP
+                  </strong>
+                  <p className="text-sm text-[#4b5d52] mt-1">
+                    Buka halaman aplikasi, cek versinya, lalu ketuk Unduh APK. Jika membuka dari komputer, gunakan fitur Scan QR di HP.
+                  </p>
+                </div>
+              </li>
 
-          <section className="rounded-2xl border border-[#E4EAE6] bg-white p-5">
-            <h2 className="text-base font-bold text-[#141917]">
-              3. Konfirmasi Google Play Protect jika muncul
-            </h2>
-            <p className="text-sm text-[#49544E] mt-1.5 leading-relaxed">
-              Build tahap internal atau beta yang belum masuk Play Store kadang memicu dialog verifikasi Play Protect. Jika sumber file berasal dari katalog resmi apps.hammad.studio, pilih Tetap instal atau Detail lainnya lalu Instal tetap.
-            </p>
-          </section>
+              <li className="grid grid-cols-[30px_1fr] gap-3 items-start">
+                <span className="w-7 h-7 rounded-lg bg-[#e9f1e4] text-[#275136] text-xs font-extrabold grid place-items-center mt-0.5">
+                  2
+                </span>
+                <div>
+                  <strong className="text-sm sm:text-base font-bold text-[#18221c]">
+                    Buka file unduhan
+                  </strong>
+                  <p className="text-sm text-[#4b5d52] mt-1">
+                    Ketuk notifikasi unduhan, atau cari file berakhiran .apk di folder Unduhan perangkat Android kamu.
+                  </p>
+                </div>
+              </li>
+
+              <li className="grid grid-cols-[30px_1fr] gap-3 items-start">
+                <span className="w-7 h-7 rounded-lg bg-[#e9f1e4] text-[#275136] text-xs font-extrabold grid place-items-center mt-0.5">
+                  3
+                </span>
+                <div>
+                  <strong className="text-sm sm:text-base font-bold text-[#18221c]">
+                    Ikuti petunjuk pemasangan
+                  </strong>
+                  <p className="text-sm text-[#4b5d52] mt-1">
+                    Aktifkan izin sumber tidak dikenal jika diminta Android, periksa nama aplikasi dan sumber file, lalu pilih Instal dan Buka setelah selesai.
+                  </p>
+                </div>
+              </li>
+            </ol>
+
+            <a
+              href="https://support.google.com/android/answer/9457058?hl=id"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#006c4c] underline underline-offset-4"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                <path d="M12 6.4C9.5 4.6 6.6 4.2 3 5.1v13.6c3.8-.9 6.8-.3 9 1.3 2.2-1.6 5.2-2.2 9-1.3V5.1c-3.6-.9-6.5-.5-9 1.3zm0 0V20" />
+              </svg>
+              <span>Panduan resmi Android</span>
+            </a>
+          </div>
         </div>
       </main>
 
       <StoreFooter />
+
+      <Suspense fallback={null}>
+        <MobileBottomNav isAuthenticated={Boolean(session)} />
+      </Suspense>
     </>
   );
 }

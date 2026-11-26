@@ -4,7 +4,7 @@ dotenv.config({ path: ".env.local" });
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import { db } from "./index";
-import { apps, appReleases, users } from "./schema";
+import { appReleases, apps, users } from "./schema";
 
 async function seed() {
   const adminEmail = process.env.ADMIN_DEFAULT_EMAIL || "admin@hammad.studio";
@@ -31,7 +31,7 @@ async function seed() {
 
   const slug = "martabak-depok-78-pos";
   const existingApp = await db
-    .select({ id: apps.id })
+    .select()
     .from(apps)
     .where(eq(apps.slug, slug))
     .limit(1);
@@ -44,12 +44,21 @@ async function seed() {
         name: "Martabak Depok 78 POS",
         packageName: "studio.hammad.martabak78pos",
         developerName: "Hammad Studio",
-        tagline: "Aplikasi kasir dan manajemen pesanan outlet Martabak Depok 78.",
+        tagline: "Buka katalog outlet, catat transaksi, dan cetak struk dari perangkat kasir.",
         description:
-          "Martabak Depok 78 POS membantu kasir mencatat transaksi outlet secara cepat, mencetak struk thermal Bluetooth, memantau stok adonan dan topping harian, serta menyinkronkan laporan penjualan ke server pusat.\n\nBuild prarilis ini disediakan khusus untuk perangkat tablet dan ponsel Android kasir sebelum publikasi resmi di Google Play.",
+          "Aplikasi kasir Android untuk operasional outlet Martabak Depok 78. Kasir dapat memilih menu dan topping dari katalog outlet, mencetak struk thermal Bluetooth, memantau stok adonan harian, dan menyinkronkan laporan transaksi.",
         category: "Bisnis & Kasir",
+        themeSkin: "amber",
         iconUrl: null,
+        bannerUrl: "/artwork/martaboy.webp",
         screenshots: [],
+        features: [
+          "Aktivasi perangkat outlet dan login cepat dengan PIN kasir",
+          "Katalog produk dan variasi topping sesuai cabang",
+          "Cetak struk thermal Bluetooth dan simpan bukti pembayaran",
+        ],
+        testerNote:
+          "Untuk masuk setelah instalasi, siapkan aktivasi perangkat dan PIN kasir dari pengelola outlet.",
         minAndroid: "Android 8.0+",
         isPublished: true,
         isFeatured: true,
@@ -73,16 +82,38 @@ async function seed() {
 
     console.log("Seeded Martabak Depok 78 POS v0.7.0");
   } else {
-    console.log("Martabak Depok 78 POS already seeded.");
+    const current = existingApp[0];
+    if (!current.bannerUrl || (current.features?.length ?? 0) === 0) {
+      await db
+        .update(apps)
+        .set({
+          themeSkin: current.themeSkin === "emerald" ? "amber" : current.themeSkin,
+          bannerUrl: current.bannerUrl || "/artwork/martaboy.webp",
+          features:
+            (current.features?.length ?? 0) > 0
+              ? current.features
+              : [
+                  "Aktivasi perangkat outlet dan login cepat dengan PIN kasir",
+                  "Katalog produk dan variasi topping sesuai cabang",
+                  "Cetak struk thermal Bluetooth dan simpan bukti pembayaran",
+                ],
+          testerNote:
+            current.testerNote ||
+            "Untuk masuk setelah instalasi, siapkan aktivasi perangkat dan PIN kasir dari pengelola outlet.",
+        })
+        .where(eq(apps.id, current.id));
+      console.log("Updated Martabak Depok 78 POS with Studio Apps artwork & features.");
+    } else {
+      console.log("Martabak Depok 78 POS already seeded.");
+    }
   }
 }
 
 seed()
   .then(() => {
     console.log("Seed complete.");
-    process.exit(0);
   })
   .catch((err) => {
     console.error("Seed failed:", err);
-    process.exit(1);
+    process.exitCode = 1;
   });

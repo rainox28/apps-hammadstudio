@@ -1,21 +1,23 @@
 import React from "react";
+import { getSkinMeta } from "@/lib/constants";
 
 interface AppIconProps {
   name: string;
   iconUrl?: string | null;
+  skin?: string;
   size?: "sm" | "md" | "lg" | "xl";
 }
 
 const SIZE_CLASSES = {
-  sm: "w-12 h-12 rounded-xl text-base",
-  md: "w-14 h-14 sm:w-16 sm:h-16 rounded-2xl text-lg",
+  sm: "w-11 h-11 rounded-[12px] text-sm",
+  md: "w-13 h-13 sm:w-14 sm:h-14 rounded-[14px] text-base",
   lg: "w-18 h-18 sm:w-20 sm:h-20 rounded-[20px] text-xl",
   xl: "w-24 h-24 sm:w-28 sm:h-28 rounded-[26px] text-3xl",
 } as const;
 
 const SIZE_PX = {
-  sm: 48,
-  md: 64,
+  sm: 44,
+  md: 56,
   lg: 80,
   xl: 112,
 } as const;
@@ -27,9 +29,15 @@ function getInitials(name: string): string {
   return (parts[0][0] + parts[1][0]).toUpperCase();
 }
 
-export function AppIcon({ name, iconUrl, size = "md" }: AppIconProps) {
+export function AppIcon({
+  name,
+  iconUrl,
+  skin = "emerald",
+  size = "md",
+}: AppIconProps) {
   const px = SIZE_PX[size];
   const sizeClass = SIZE_CLASSES[size];
+  const skinMeta = getSkinMeta(skin);
 
   if (iconUrl) {
     return (
@@ -38,7 +46,7 @@ export function AppIcon({ name, iconUrl, size = "md" }: AppIconProps) {
         alt={`Ikon aplikasi ${name}`}
         width={px}
         height={px}
-        className={`${sizeClass} shrink-0 object-cover border border-[#E2E8E5] bg-[#F8FAF9] play-icon-elevation`}
+        className={`${sizeClass} shrink-0 object-cover border border-[#dce3da] bg-white shadow-[0_2px_6px_rgba(24,34,28,0.08)]`}
       />
     );
   }
@@ -46,7 +54,11 @@ export function AppIcon({ name, iconUrl, size = "md" }: AppIconProps) {
   return (
     <div
       aria-hidden="true"
-      className={`${sizeClass} shrink-0 flex items-center justify-center border border-[#C8D3CC] bg-[#E6F4EE] text-[#017A56] font-bold tracking-tight select-none play-icon-elevation`}
+      style={{
+        backgroundColor: skinMeta.iconBg,
+        color: skinMeta.iconInk,
+      }}
+      className={`${sizeClass} shrink-0 flex items-center justify-center border border-[#dce3da]/70 font-extrabold tracking-tight select-none shadow-[0_2px_6px_rgba(24,34,28,0.08)]`}
     >
       {getInitials(name)}
     </div>

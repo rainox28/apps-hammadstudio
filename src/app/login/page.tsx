@@ -14,32 +14,34 @@ export default async function LoginPage() {
   }
 
   return (
-    <div className="min-h-dvh flex flex-col bg-[#F8FAF9] px-4 py-10">
+    <div className="min-h-dvh flex flex-col bg-[#fafbf8] px-4 py-10">
       <div className="max-w-md w-full m-auto">
         <div className="mb-6 flex items-center justify-between">
           <Link
             href="/"
-            className="inline-flex items-center gap-2.5 text-sm font-bold text-[#111815] hover:text-[#017A56]"
+            className="inline-flex items-center gap-2.5 text-base font-extrabold tracking-[-0.04em] text-[#18221c] hover:text-[#006c4c]"
           >
-            <BrandLogo size={32} />
-            <span>apps.hammad.studio</span>
+            <BrandLogo size={34} />
+            <span>
+              Studio <span className="text-[#006c4c]">Apps</span>
+            </span>
           </Link>
           <Link
             href="/"
-            className="min-h-11 inline-flex items-center text-xs font-semibold text-[#48544E] hover:text-[#111815]"
+            className="min-h-11 inline-flex items-center text-xs font-semibold text-[#52625a] hover:text-[#18221c]"
           >
             Kembali ke Katalog
           </Link>
         </div>
 
-        <main className="rounded-3xl border border-[#E2E8E5] bg-white p-6 sm:p-8 play-card-elevation">
-          <div className="flex items-center gap-3 mb-4">
+        <main className="rounded-[22px] border border-[#dce3da] bg-white p-6 sm:p-8 shadow-[0_4px_16px_rgba(24,34,28,0.04)]">
+          <div className="flex items-center gap-3 mb-5">
             <BrandLogo size={42} />
             <div>
-              <h1 className="text-xl sm:text-2xl font-bold text-[#111815] tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-extrabold text-[#18221c] tracking-[-0.04em]">
                 Studio Console
               </h1>
-              <p className="text-xs text-[#48544E]">
+              <p className="text-xs text-[#52625a]">
                 Masuk untuk mengelola katalog &amp; rilis APK
               </p>
             </div>
