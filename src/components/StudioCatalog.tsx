@@ -11,6 +11,7 @@ import {
 } from "@/lib/constants";
 import { useSavedApps } from "@/lib/saved-apps";
 import { getCoverSrc, getStageLabel, getTileSrc } from "@/lib/app-art";
+import { ApkDownloadLink } from "@/components/ApkDownloadLink";
 
 interface StudioCatalogProps {
   apps: AppWithLatestRelease[];
@@ -207,13 +208,14 @@ export function StudioCatalog({ apps }: StudioCatalogProps) {
                   </p>
                 </div>
                 {activeHero.latestRelease ? (
-                  <a
-                    href={`/api/releases/${activeHero.latestRelease.id}/download`}
+                  <ApkDownloadLink
+                    releaseId={activeHero.latestRelease.id}
+                    apkUrl={activeHero.latestRelease.apkUrl}
                     className="min-h-11 px-6 inline-flex items-center gap-2 rounded-full bg-glow text-glow-ink text-sm font-bold tactile-press hover:brightness-105"
                   >
                     <DownloadIcon />
                     Unduh APK
-                  </a>
+                  </ApkDownloadLink>
                 ) : (
                   <Link
                     href={`/apps/${activeHero.slug}`}
@@ -349,12 +351,13 @@ export function StudioCatalog({ apps }: StudioCatalogProps) {
                       </span>
                     </span>
                     {app.latestRelease ? (
-                      <a
-                        href={`/api/releases/${app.latestRelease.id}/download`}
+                      <ApkDownloadLink
+                        releaseId={app.latestRelease.id}
+                        apkUrl={app.latestRelease.apkUrl}
                         className="min-h-10 px-4 inline-flex items-center rounded-full bg-glow text-glow-ink text-[13px] font-bold tactile-press"
                       >
                         Unduh
-                      </a>
+                      </ApkDownloadLink>
                     ) : (
                       <Link
                         href={`/apps/${app.slug}`}

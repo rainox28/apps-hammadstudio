@@ -4,16 +4,7 @@ import { db } from "@/db";
 import { appReleases, apps } from "@/db/schema";
 import { getSession } from "@/lib/auth";
 
-export async function GET(
-  _req: Request,
-  context: { params: Promise<{ id: string }> }
-) {
-  const { id } = await context.params;
-  const releaseId = Number(id);
-  if (!Number.isInteger(releaseId) || releaseId <= 0) {
-    return NextResponse.json({ error: "ID rilis tidak valid." }, { status: 400 });
-  }
-
+async function recordDownload(releaseId: number) {
   const rows = await db
     .select({
       releaseId: appReleases.id,
@@ -27,15 +18,11 @@ export async function GET(
     .limit(1);
 
   const row = rows[0];
-  if (!row) {
-    return NextResponse.json({ error: "File rilis tidak ditemukan." }, { status: 404 });
-  }
+  if (!row) return { status: 404 as const, error: "File rilis tidak ditemukan." };
 
   if (!row.isPublished) {
     const admin = await getSession();
-    if (!admin) {
-      return NextResponse.json({ error: "Rilis belum dipublikasikan." }, { status: 403 });
-    }
+    if (!admin) return { status: 403 as const, error: "Rilis belum dipublikasikan." };
   }
 
   await db.batch([
@@ -49,5 +36,40 @@ export async function GET(
       .where(eq(apps.id, row.appId)),
   ]);
 
-  return NextResponse.redirect(row.apkUrl, 302);
+  return { status: 200 as const, apkUrl: row.apkUrl };
+}
+
+export async function POST(
+  _req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
+  const { id } = await context.params;
+  const releaseId = Number(id);
+  if (!Number.isInteger(releaseId) || releaseId <= 0) {
+    return NextResponse.json({ error: "ID rilis tidak valid." }, { status: 400 });
+  }
+
+  const result = await recordDownload(releaseId);
+  if (result.status !== 200) {
+    return NextResponse.json({ error: result.error }, { status: result.status });
+  }
+  return NextResponse.json({ ok: true });
+}
+
+export async function GET(
+  _req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
+  const { id } = await context.params;
+  const releaseId = Number(id);
+  if (!Number.isInteger(releaseId) || releaseId <= 0) {
+    return NextResponse.json({ error: "ID rilis tidak valid." }, { status: 400 });
+  }
+
+  const result = await recordDownload(releaseId);
+  if (result.status !== 200) {
+    return NextResponse.json({ error: result.error }, { status: result.status });
+  }
+
+  return NextResponse.redirect(result.apkUrl, 302);
 }

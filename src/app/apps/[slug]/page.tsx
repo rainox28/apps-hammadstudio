@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { getPublishedAppBySlug, getPublishedApps } from "@/db/queries";
 import { getSession } from "@/lib/auth";
@@ -12,6 +12,7 @@ import { TrackBadge } from "@/components/TrackBadge";
 import { QrCodeModal } from "@/components/QrCodeModal";
 import { ScreenshotGallery } from "@/components/ScreenshotGallery";
 import { CopyTextButton } from "@/components/CopyTextButton";
+import { ApkDownloadLink } from "@/components/ApkDownloadLink";
 import { getCoverSrc, getStageLabel, getTileSrc } from "@/lib/app-art";
 
 export const dynamic = "force-dynamic";
@@ -37,7 +38,7 @@ export async function generateMetadata({
 function formatDateId(date: Date): string {
   return new Intl.DateTimeFormat("id-ID", {
     day: "numeric",
-    month: "short",
+    month: "long",
     year: "numeric",
   }).format(new Date(date));
 }
@@ -59,6 +60,10 @@ export default async function AppDetailPage({ params }: AppDetailPageProps) {
   ]);
 
   if (!app) {
+    if (slug === "martabak-depok-78-pos") {
+      const migrated = await getPublishedAppBySlug("martaboy-pos");
+      if (migrated) redirect("/apps/martaboy-pos");
+    }
     notFound();
   }
 
@@ -125,20 +130,21 @@ export default async function AppDetailPage({ params }: AppDetailPageProps) {
             <div className="mt-8 flex flex-wrap items-center gap-3">
               {latestRelease ? (
                 <>
-                  <a
-                    href={`/api/releases/${latestRelease.id}/download`}
+                  <ApkDownloadLink
+                    releaseId={latestRelease.id}
+                    apkUrl={latestRelease.apkUrl}
                     className="min-h-12 px-7 inline-flex items-center gap-2 rounded-full bg-glow text-glow-ink text-[15px] font-bold tactile-press hover:brightness-105"
                   >
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
                       <path d="M12 4v11M7 10l5 5 5-5M5 20h14" />
                     </svg>
-                    Unduh APK
-                  </a>
+                    Unduh APK Android
+                  </ApkDownloadLink>
                   <QrCodeModal
                     tone="dark"
                     appName={app.name}
                     versionName={latestRelease.versionName}
-                    downloadPath={`/api/releases/${latestRelease.id}/download`}
+                    downloadPath={latestRelease.apkUrl}
                   />
                   <span className="text-xs text-night-mute">Dirilis {formatDateId(latestRelease.publishedAt)}</span>
                 </>
@@ -218,17 +224,18 @@ export default async function AppDetailPage({ params }: AppDetailPageProps) {
               <div className="mt-3 overflow-hidden rounded-[14px] border border-line divide-y divide-line">
                 {app.releases.map((rel) => (
                   <div key={rel.id} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 sm:px-5 py-3">
-                    <span className="font-mono text-sm min-w-[130px]">v{rel.versionName}</span>
+                    <span className="font-mono text-sm min-w-[130px]">v{rel.versionName} · build {rel.versionCode}</span>
                     <TrackBadge track={rel.track} />
                     <span className="flex-1 min-w-[160px] text-[13px] text-ink-3 tabular-nums">
                       {formatDateId(rel.publishedAt)} · {rel.fileSizeLabel}
                     </span>
-                    <a
-                      href={`/api/releases/${rel.id}/download`}
+                    <ApkDownloadLink
+                      releaseId={rel.id}
+                      apkUrl={rel.apkUrl}
                       className="min-h-10 inline-flex items-center px-2 text-[13px] font-semibold text-accent hover:text-accent-hover"
                     >
-                      Unduh
-                    </a>
+                      Unduh v{rel.versionName}
+                    </ApkDownloadLink>
                   </div>
                 ))}
               </div>
@@ -245,7 +252,11 @@ export default async function AppDetailPage({ params }: AppDetailPageProps) {
               {latestRelease && (
                 <>
                   <dt className="text-ink-3">Jalur</dt>
-                  <dd>{trackMeta?.label} · build {latestRelease.versionCode}</dd>
+                  <dd>{trackMeta?.label}, unduhan langsung</dd>
+                  <dt className="text-ink-3">Versi / build</dt>
+                  <dd className="font-mono text-xs">{latestRelease.versionName} / {latestRelease.versionCode}</dd>
+                  <dt className="text-ink-3">Minimum</dt>
+                  <dd>{app.minAndroid}</dd>
                   <dt className="text-ink-3">Sumber</dt>
                   <dd className="font-mono text-xs break-all">{extractHost(latestRelease.apkUrl)}</dd>
                   <dt className="text-ink-3">SHA-256</dt>
@@ -261,6 +272,14 @@ export default async function AppDetailPage({ params }: AppDetailPageProps) {
                 label="Salin ID paket"
                 className="min-h-9 px-3 rounded-full border border-line text-xs font-semibold text-ink-2 hover:bg-raised"
               />
+              {latestRelease?.sha256 && (
+                <CopyTextButton
+                  value={latestRelease.sha256}
+                  label="Salin SHA-256"
+                  copiedLabel="SHA-256 tersalin"
+                  className="min-h-9 px-3 rounded-full border border-line text-xs font-semibold text-ink-2 hover:bg-raised"
+                />
+              )}
               <CopyTextButton
                 value={`/apps/${app.slug}`}
                 relativePath
